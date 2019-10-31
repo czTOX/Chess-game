@@ -58,11 +58,11 @@ class Kral(Figurka):
         if not self.moved:
             if self.x+3 <= 7 and type(pole[self.x+3][self.y]) == Vez:   # Krátká rošáda na pravou stranu
                 if pole[self.x+1][self.y] == '' and pole[self.x+2][self.y] == '':
-                    if not fce.je_v_sachu(pole, pole[self.x][self.y], self.jecerna) and not fce.je_v_sachu(pole, pole[self.x+1][self.y], self.jecerna) and not fce.je_v_sachu(pole, pole[self.x+2][self.y], self.jecerna):
+                    if not fce.je_v_sachu(pole, [self.x, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x+1, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x+2, self.y], self.jecerna):
                         sug.append([self.x+2, self.y])
             if self.x-4 >= 0 and type(pole[self.x-4][self.y]) == Vez:   # Dlouhá rošáda na levou stranu
                 if pole[self.x-1][self.y] == '' and pole[self.x-2][self.y] == '' and pole[self.x-3][self.y] == '':
-                    if not fce.je_v_sachu(pole, pole[self.x][self.y], self.jecerna) and not fce.je_v_sachu(pole, pole[self.x-1][self.y], self.jecerna) and not fce.je_v_sachu(pole, pole[self.x-2][self.y], self.jecerna):
+                    if not fce.je_v_sachu(pole, [self.x, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-1, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-2, self.y], self.jecerna):
                         sug.append([self.x-2, self.y])
         return sug
 

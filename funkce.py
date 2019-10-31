@@ -71,6 +71,5 @@ def je_v_sachu(pole, souradnice, barva):
         for prvek_xy in prvek_x:
             if prvek_xy is not '' and type(prvek_xy) is not figurky.Kral:
                 if prvek_xy.jecerna is not barva and souradnice in prvek_xy.kam(pole):
-                    print(prvek_xy.jecerna, barva)
                     return True
     return False
