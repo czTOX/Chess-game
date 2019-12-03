@@ -73,3 +73,17 @@ def je_v_sachu(pole, souradnice, barva):
                 if prvek_xy.jecerna is not barva and souradnice in prvek_xy.kam(pole):
                     return True
     return False
+
+
+def vypis_mrtvych(window, dead):
+    posun_black = 0
+    posun_white = 0
+    for item in dead:
+        if item.jecerna:
+            item.this = pygame.transform.scale(item.this, (25, 25))
+            window.blit(item.this, (900+posun_black, 200))
+            posun_black+=30
+        else:
+            item.this = pygame.transform.scale(item.this, (25, 25))
+            window.blit(item.this, (900 + posun_white, 575))
+            posun_white+=30

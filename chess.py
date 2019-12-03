@@ -59,6 +59,8 @@ window.blit(image_user, [1225, 75])
 window.blit(image_user, [1225, 625])
 pygame.display.update()
 
+dead = []
+
 # Hlavní smyčka
 while run:
     for event in pygame.event.get():
@@ -74,7 +76,9 @@ while run:
                         # TODO přidat rámeček kolem hráče, ať jde vidět kdo je na tahu
                         # TODO Zde přidat zda je v šachu(potom se nemovne), zda li je v matu => exit game
                         # TODO zapisování skore do souboru
-                        # TODO Vykreslovat dead figurky
+                        if pole[x][y] is not '':
+                            dead.append(pole[x][y])
+                            fce.vypis_mrtvych(window, dead)
                         item.move(pole, [x, y])
                         selected = False
                         ktera_tahne = not ktera_tahne
