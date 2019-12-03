@@ -13,8 +13,6 @@ sug = []
 ktera_tahne = True
 item = figurky.Figurka
 sach = False
-pozice_bileho_krale = [0, 0]
-pozice_cerneho_krale = [0, 0]
 
 pygame.init()
 window = pygame.display.set_mode((width, height))
@@ -24,26 +22,31 @@ window.fill([212, 241, 249])
 background = pygame.image.load("obrazky/background.jpg")
 window.blit(background, [800, 0])
 pole = [['' for x in range(8)] for y in range(8)]
+whiteFigs = []
+blackFigs = []
 
-kral = figurky.Kral(True, 4, 0, pole), \
-       figurky.Kral(False, 4, 7, pole)
-kralovna = figurky.Kralovna(True, 3, 0, pole), \
-           figurky.Kralovna(False, 3, 7, pole)
-strelec = figurky.Strelec(True, 2, 0, pole), \
-          figurky.Strelec(True, 5, 0, pole), \
-          figurky.Strelec(False, 2, 7, pole),\
-          figurky.Strelec(False, 5, 7, pole)
-kun = figurky.Kun(True, 1, 0, pole), \
-         figurky.Kun(True, 6, 0, pole), \
-         figurky.Kun(False, 1, 7, pole), \
-         figurky.Kun(False, 6, 7, pole)
-vez = figurky.Vez(True, 0, 0, pole), \
-      figurky.Vez(True, 7, 0, pole), \
-      figurky.Vez(False, 0, 7, pole), \
-      figurky.Vez(False, 7, 7, pole)
+
+kral = blackFigs.append(figurky.Kral(True, 4, 0, pole)), \
+       whiteFigs.append(figurky.Kral(False, 4, 7, pole))
+pozice_bileho_krale = [4, 0]
+pozice_cerneho_krale = [4, 7]
+kralovna = blackFigs.append(figurky.Kralovna(True, 3, 0, pole)), \
+           whiteFigs.append(figurky.Kralovna(False, 3, 7, pole))
+strelec = blackFigs.append(figurky.Strelec(True, 2, 0, pole)), \
+          blackFigs.append(figurky.Strelec(True, 5, 0, pole)), \
+          whiteFigs.append(figurky.Strelec(False, 2, 7, pole)),\
+          whiteFigs.append(figurky.Strelec(False, 5, 7, pole))
+kun = blackFigs.append(figurky.Kun(True, 1, 0, pole)), \
+         blackFigs.append(figurky.Kun(True, 6, 0, pole)), \
+         whiteFigs.append(figurky.Kun(False, 1, 7, pole)), \
+         whiteFigs.append(figurky.Kun(False, 6, 7, pole))
+vez = blackFigs.append(figurky.Vez(True, 0, 0, pole)), \
+      blackFigs.append(figurky.Vez(True, 7, 0, pole)), \
+      whiteFigs.append(figurky.Vez(False, 0, 7, pole)), \
+      whiteFigs.append(figurky.Vez(False, 7, 7, pole))
 for i in range(8):
-    figurky.Pesak(True, i, 1, pole)
-    figurky.Pesak(False, i, 6, pole)
+    blackFigs.append(figurky.Pesak(True, i, 1, pole))
+    whiteFigs.append(figurky.Pesak(False, i, 6, pole))
 
 fce.vykresli_sachovnici(window, 800)
 fce.vykresli_pole(window, pole)
@@ -65,10 +68,13 @@ while run:
             x, y = pygame.mouse.get_pos()
             x = math.floor(x/100)
             y = math.floor(y/100)
-            if x <= 8:
+            if x <= 7:
                 if selected:
                     if [x, y] in sug:
-                        # TODO nemám vyřešeno pro rošádu atd.
+                        # TODO přidat rámeček kolem hráče, ať jde vidět kdo je na tahu
+                        # TODO Zde přidat zda je v šachu(potom se nemovne), zda li je v matu => exit game
+                        # TODO zapisování skore do souboru
+                        # TODO Vykreslovat dead figurky
                         item.move(pole, [x, y])
                         selected = False
                         ktera_tahne = not ktera_tahne
