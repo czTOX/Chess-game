@@ -82,8 +82,14 @@ def vypis_mrtvych(window, dead):
         if item.jecerna:
             item.this = pygame.transform.scale(item.this, (25, 25))
             window.blit(item.this, (900+posun_black, 200))
-            posun_black+=30
+            posun_black += 30
         else:
             item.this = pygame.transform.scale(item.this, (25, 25))
             window.blit(item.this, (900 + posun_white, 575))
-            posun_white+=30
+            posun_white += 30
+
+
+def zapis_skore(jmeno, time):
+    zebricek = open("zebricek.txt", "a+")
+    zebricek.write(jmeno + " dosáhl(a) času: " + str(time))
+    zebricek.close()

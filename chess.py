@@ -14,6 +14,7 @@ ktera_tahne = True
 item = figurky.Figurka
 sach = False
 
+start_ticks = pygame.time.get_ticks()
 pygame.init()
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Šachy")
@@ -51,10 +52,8 @@ for i in range(8):
 fce.vykresli_sachovnici(window, 800)
 fce.vykresli_pole(window, pole)
 
-text = font.render("Zde bude timer", True, [0, 0, 0])
 image_user = pygame.image.load("obrazky/user.png")
 image_ai = pygame.image.load("obrazky/ai.png")
-window.blit(text, [1200, 355])
 window.blit(image_user, [1225, 75])
 window.blit(image_user, [1225, 625])
 pygame.display.update()
@@ -103,3 +102,8 @@ while run:
                             sug = item.kam(pole)
                             fce.vyresli_moznosti(window, sug)
                             pygame.display.update()
+    seconds = (pygame.time.get_ticks() - start_ticks) / 1000
+    text = font.render(("%02d:%02d" % (math.floor(seconds)/60, math.floor(seconds) % 60)), True, [0, 0, 0])
+    pygame.draw.rect(window, [255, 255, 255], (1300, 355, 60, 30))
+    window.blit(text, [1300, 355])
+    pygame.display.update()
