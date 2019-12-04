@@ -3,6 +3,7 @@ import pygame
 import figurky
 import funkce as fce
 import math
+import ctypes
 
 # Konstanty
 width = 1400
@@ -73,15 +74,28 @@ while run:
                 if selected:
                     if [x, y] in sug:
                         # TODO přidat rámeček kolem hráče, ať jde vidět kdo je na tahu
-                        # TODO Zde přidat zda je v šachu(potom se nemovne), zda li je v matu => exit game
-                        # TODO zapisování skore do souboru
-                        if pole[x][y] is not '':
-                            dead.append(pole[x][y])
-                            fce.vypis_mrtvych(window, dead)
-                        item.move(pole, [x, y])
-                        selected = False
-                        ktera_tahne = not ktera_tahne
-                        fce.refresh(window, pole)
+                        if ktera_tahne:
+                            if fce.je_v_sachu(pole, pozice_cerneho_krale, False):
+                                ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
+                            else:
+                                if pole[x][y] is not '':
+                                    dead.append(pole[x][y])
+                                    fce.vypis_mrtvych(window, dead)
+                                item.move(pole, [x, y])
+                                selected = False
+                                ktera_tahne = not ktera_tahne
+                                fce.refresh(window, pole)
+                        else:
+                            if fce.je_v_sachu(pole, pozice_bileho_krale, True):
+                                ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
+                            else:
+                                if pole[x][y] is not '':
+                                    dead.append(pole[x][y])
+                                    fce.vypis_mrtvych(window, dead)
+                                item.move(pole, [x, y])
+                                selected = False
+                                ktera_tahne = not ktera_tahne
+                                fce.refresh(window, pole)
                     elif pole[x][y] is '' or pole[x][y] is item or pole[x][y].jecerna is ktera_tahne:
                         selected = False
                         fce.refresh(window, pole)
