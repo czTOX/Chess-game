@@ -91,5 +91,5 @@ def vypis_mrtvych(window, dead):
 
 def zapis_skore(jmeno, time):
     zebricek = open("zebricek.txt", "a+")
-    zebricek.write(jmeno + " dosahl(a) casu: " + str(time))
+    zebricek.write(jmeno + ";" + str(time))
     zebricek.close()
