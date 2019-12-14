@@ -66,12 +66,18 @@ def refresh(widnow, pole):
     pygame.display.update()
 
 
-def je_v_sachu(pole, souradnice, barva):
-    for prvek_x in pole:
-        for prvek_xy in prvek_x:
-            if prvek_xy is not '' and type(prvek_xy) is not figurky.Kral:
-                if prvek_xy.jecerna is not barva and souradnice in prvek_xy.kam(pole):
-                    return True
+def je_v_sachu(pole, souradnice, figurky_nepritele):
+    for fig in figurky_nepritele:
+        if type(fig) != figurky.Kral:
+            if type(fig) == figurky.Pesak:
+                if fig.jecerna:
+                    if souradnice == [fig.x + 1, fig.y + 1] or souradnice == [fig.x - 1, fig.y + 1]:
+                        return True
+                else:
+                    if souradnice == [fig.x - 1, fig.y - 1] or souradnice == [fig.x + 1, fig.y - 1]:
+                        return True
+            elif souradnice in fig.kam(pole):
+                return True
     return False
 
 
@@ -93,3 +99,4 @@ def zapis_skore(jmeno, time):
     zebricek = open("zebricek.txt", "a+")
     zebricek.write(jmeno + ";" + str(time))
     zebricek.close()
+

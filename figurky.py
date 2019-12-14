@@ -1,6 +1,8 @@
 import pygame
 import funkce as fce
 
+from chess import whiteFigs, blackFigs
+
 
 # Třídy
 class Figurka:
@@ -64,6 +66,9 @@ class Kral(Figurka):
                 if pole[self.x-1][self.y] == '' and pole[self.x-2][self.y] == '' and pole[self.x-3][self.y] == '':
                     if not fce.je_v_sachu(pole, [self.x, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-1, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-2, self.y], self.jecerna):
                         sug.append([self.x-2, self.y])
+        for poz in sug:
+            if fce.je_v_sachu(pole, poz, self.jecerna):
+                sug.remove(poz)
         return sug
 
     def move(self, pole, where):
