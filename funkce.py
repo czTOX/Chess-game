@@ -97,7 +97,6 @@ def je_v_sachu(pole, souradnice, enemy_figs):
                 if souradnice == [fig.x - 1, fig.y - 1] or souradnice == [fig.x + 1, fig.y - 1]:
                     return True
         elif type(fig) == figurky.Kral:
-            # Switchnout pole enemy_figs, a pokud to narazí na krále to ho to přeskočí
             sug = []
             x_kolik = 3
             y_kolik = 3

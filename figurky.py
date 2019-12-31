@@ -70,9 +70,11 @@ class Kral(Figurka):
                 if pole[self.x-1][self.y] == '' and pole[self.x-2][self.y] == '' and pole[self.x-3][self.y] == '':
                     if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-1, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-2, self.y], enemy_pole):
                         sug.append([self.x-2, self.y])
+        pole[self.x][self.y] = ''
         for i in range(len(sug) - 1, -1, -1):
             if fce.je_v_sachu(pole, sug[i], enemy_pole):
                 del sug[i]
+        pole[self.x][self.y] = self
         return sug
 
     def move(self, pole, where):
