@@ -4,6 +4,7 @@ import figurky
 import funkce as fce
 import math
 import ctypes
+from variables import whiteFigs, blackFigs
 
 # Konstanty
 width = 1400
@@ -25,26 +26,24 @@ window.fill([212, 241, 249])
 background = pygame.image.load("obrazky/background.jpg")
 window.blit(background, [800, 0])
 pole = [['' for x in range(8)] for y in range(8)]
-whiteFigs = []
-blackFigs = []
 
 
-kral_c = blackFigs.append(figurky.Kral(True, 4, 0, pole))
-kral_b = whiteFigs.append(figurky.Kral(False, 4, 7, pole))
-kralovna = blackFigs.append(figurky.Kralovna(True, 3, 0, pole)), \
-           whiteFigs.append(figurky.Kralovna(False, 3, 7, pole))
-strelec = blackFigs.append(figurky.Strelec(True, 2, 0, pole)), \
-          blackFigs.append(figurky.Strelec(True, 5, 0, pole)), \
-          whiteFigs.append(figurky.Strelec(False, 2, 7, pole)),\
-          whiteFigs.append(figurky.Strelec(False, 5, 7, pole))
-kun = blackFigs.append(figurky.Kun(True, 1, 0, pole)), \
-         blackFigs.append(figurky.Kun(True, 6, 0, pole)), \
-         whiteFigs.append(figurky.Kun(False, 1, 7, pole)), \
-         whiteFigs.append(figurky.Kun(False, 6, 7, pole))
-vez = blackFigs.append(figurky.Vez(True, 0, 0, pole)), \
-      blackFigs.append(figurky.Vez(True, 7, 0, pole)), \
-      whiteFigs.append(figurky.Vez(False, 0, 7, pole)), \
-      whiteFigs.append(figurky.Vez(False, 7, 7, pole))
+kral_c = figurky.Kral(True, 4, 0, pole)
+kral_b = figurky.Kral(False, 4, 7, pole)
+blackFigs.append(figurky.Kralovna(True, 3, 0, pole))
+whiteFigs.append(figurky.Kralovna(False, 3, 7, pole))
+blackFigs.append(figurky.Strelec(True, 2, 0, pole)),
+blackFigs.append(figurky.Strelec(True, 5, 0, pole)),
+whiteFigs.append(figurky.Strelec(False, 2, 7, pole)),
+whiteFigs.append(figurky.Strelec(False, 5, 7, pole))
+blackFigs.append(figurky.Kun(True, 1, 0, pole)),
+blackFigs.append(figurky.Kun(True, 6, 0, pole)),
+whiteFigs.append(figurky.Kun(False, 1, 7, pole)),
+whiteFigs.append(figurky.Kun(False, 6, 7, pole))
+blackFigs.append(figurky.Vez(True, 0, 0, pole)),
+blackFigs.append(figurky.Vez(True, 7, 0, pole)),
+whiteFigs.append(figurky.Vez(False, 0, 7, pole)),
+whiteFigs.append(figurky.Vez(False, 7, 7, pole))
 for i in range(8):
     blackFigs.append(figurky.Pesak(True, i, 1, pole))
     whiteFigs.append(figurky.Pesak(False, i, 6, pole))
@@ -79,7 +78,7 @@ while run:
                             recover_fig = pole[x][y]
                         item.move(pole, [x, y])
                         if ktera_tahne:
-                            if fce.je_v_sachu(pole, [kral_b.x, kral_b.y], False):
+                            if fce.je_v_sachu(pole, [kral_b.x, kral_b.y], blackFigs):
                                 # TODO zeptat se jestli je v matu
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
@@ -88,6 +87,7 @@ while run:
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
                                 if pole[x][y] is not '':
+                                    blackFigs.remove(pole[x][y])
                                     dead.append(pole[x][y])
                                     fce.vypis_mrtvych(window, dead)
                                 item.move(pole, [x, y])
@@ -95,8 +95,9 @@ while run:
                                 ktera_tahne = not ktera_tahne
                                 fce.refresh(window, pole)
                         else:
-                            if fce.je_v_sachu(pole, [kral_c.x, kral_c.y], True):
+                            if fce.je_v_sachu(pole, [kral_c.x, kral_c.y], whiteFigs):
                                 # TODO zeptat se jestli je v matu
+                                # TODO odstraňovat figurky z polí whiteFigs, blackFigs
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
@@ -104,6 +105,7 @@ while run:
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
                                 if pole[x][y] is not '':
+                                    whiteFigs.remove(pole[x][y])
                                     dead.append(pole[x][y])
                                     fce.vypis_mrtvych(window, dead)
                                 item.move(pole, [x, y])

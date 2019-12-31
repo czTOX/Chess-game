@@ -1,0 +1,3 @@
+# Konstanty
+whiteFigs = []
+blackFigs = []

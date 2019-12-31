@@ -1,7 +1,6 @@
 import pygame
 import funkce as fce
-
-from chess import whiteFigs, blackFigs
+from variables import whiteFigs, blackFigs
 
 
 # Třídy
@@ -57,18 +56,23 @@ class Kral(Figurka):
                 else:
                     if pole[x_zacatek+x][y_zacatek+y] is '' or pole[x_zacatek+x][y_zacatek+y].jecerna is not self.jecerna:
                         sug.append([x_zacatek+x, y_zacatek+y])
+        if self.jecerna:
+            enemy_pole = whiteFigs
+        else:
+            enemy_pole = blackFigs
+        # Rošáda
         if not self.moved:
             if self.x+3 <= 7 and type(pole[self.x+3][self.y]) == Vez:   # Krátká rošáda na pravou stranu
                 if pole[self.x+1][self.y] == '' and pole[self.x+2][self.y] == '':
-                    if not fce.je_v_sachu(pole, [self.x, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x+1, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x+2, self.y], self.jecerna):
+                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x+1, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x+2, self.y], enemy_pole):
                         sug.append([self.x+2, self.y])
             if self.x-4 >= 0 and type(pole[self.x-4][self.y]) == Vez:   # Dlouhá rošáda na levou stranu
                 if pole[self.x-1][self.y] == '' and pole[self.x-2][self.y] == '' and pole[self.x-3][self.y] == '':
-                    if not fce.je_v_sachu(pole, [self.x, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-1, self.y], self.jecerna) and not fce.je_v_sachu(pole, [self.x-2, self.y], self.jecerna):
+                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-1, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-2, self.y], enemy_pole):
                         sug.append([self.x-2, self.y])
-        for poz in sug:
-            if fce.je_v_sachu(pole, poz, self.jecerna):
-                sug.remove(poz)
+        for i in range(len(sug) - 1, -1, -1):
+            if fce.je_v_sachu(pole, sug[i], enemy_pole):
+                del sug[i]
         return sug
 
     def move(self, pole, where):

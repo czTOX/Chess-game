@@ -2,6 +2,7 @@
 import pygame
 import tkinter as tk
 import figurky
+from variables import *
 
 
 # Funkce
@@ -66,21 +67,6 @@ def refresh(widnow, pole):
     pygame.display.update()
 
 
-def je_v_sachu(pole, souradnice, figurky_nepritele):
-    for fig in figurky_nepritele:
-        if type(fig) != figurky.Kral:
-            if type(fig) == figurky.Pesak:
-                if fig.jecerna:
-                    if souradnice == [fig.x + 1, fig.y + 1] or souradnice == [fig.x - 1, fig.y + 1]:
-                        return True
-                else:
-                    if souradnice == [fig.x - 1, fig.y - 1] or souradnice == [fig.x + 1, fig.y - 1]:
-                        return True
-            elif souradnice in fig.kam(pole):
-                return True
-    return False
-
-
 def vypis_mrtvych(window, dead):
     posun_black = 0
     posun_white = 0
@@ -100,3 +86,48 @@ def zapis_skore(jmeno, time):
     zebricek.write(jmeno + ";" + str(time))
     zebricek.close()
 
+
+def je_v_sachu(pole, souradnice, enemy_figs):
+    for fig in enemy_figs:
+        if type(fig) == figurky.Pesak:
+            if fig.jecerna:
+                if souradnice == [fig.x + 1, fig.y + 1] or souradnice == [fig.x - 1, fig.y + 1]:
+                    return True
+            else:
+                if souradnice == [fig.x - 1, fig.y - 1] or souradnice == [fig.x + 1, fig.y - 1]:
+                    return True
+        elif type(fig) == figurky.Kral:
+            # Switchnout pole enemy_figs, a pokud to narazí na krále to ho to přeskočí
+            sug = []
+            x_kolik = 3
+            y_kolik = 3
+            x_zacatek = fig.x - 1
+            y_zacatek = fig.y - 1
+            if fig.x == 0:
+                x_kolik = 2
+                x_zacatek = fig.x
+            elif fig.x == 7:
+                x_kolik = 2
+            if fig.y == 0:
+                y_kolik = 2
+                y_zacatek = fig.y
+            elif fig.y == 7:
+                y_kolik = 2
+
+            for x in range(x_kolik):
+                for y in range(y_kolik):
+                    if x == fig.x and y == fig.y:
+                        continue
+                    else:
+                        if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][y_zacatek + y].jecerna is not fig.jecerna:
+                            sug.append([x_zacatek + x, y_zacatek + y])
+            if souradnice in sug:
+                return True
+        elif souradnice in fig.kam(pole):
+            return True
+    return False
+
+
+def je_mat(pole, souradnice, enemy_figs):
+    # Může se král movnou někam, kde by šach neměl
+    pass
