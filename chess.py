@@ -28,27 +28,27 @@ window.blit(background, [800, 0])
 pole = [['' for x in range(8)] for y in range(8)]
 
 
-kral_c = figurky.Kral(True, 4, 0, pole)
+kral_c = figurky.Kral(True, 4, 0, pole, 0)
 blackFigs.append(kral_c)
-kral_b = figurky.Kral(False, 4, 7, pole)
+kral_b = figurky.Kral(False, 4, 7, pole, 0)
 whiteFigs.append(kral_b)
-blackFigs.append(figurky.Kralovna(True, 3, 0, pole))
-whiteFigs.append(figurky.Kralovna(False, 3, 7, pole))
-blackFigs.append(figurky.Strelec(True, 2, 0, pole)),
-blackFigs.append(figurky.Strelec(True, 5, 0, pole)),
-whiteFigs.append(figurky.Strelec(False, 2, 7, pole)),
-whiteFigs.append(figurky.Strelec(False, 5, 7, pole))
-blackFigs.append(figurky.Kun(True, 1, 0, pole)),
-blackFigs.append(figurky.Kun(True, 6, 0, pole)),
-whiteFigs.append(figurky.Kun(False, 1, 7, pole)),
-whiteFigs.append(figurky.Kun(False, 6, 7, pole))
-blackFigs.append(figurky.Vez(True, 0, 0, pole)),
-blackFigs.append(figurky.Vez(True, 7, 0, pole)),
-whiteFigs.append(figurky.Vez(False, 0, 7, pole)),
-whiteFigs.append(figurky.Vez(False, 7, 7, pole))
+blackFigs.append(figurky.Kralovna(True, 3, 0, pole, 0))
+whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 0))
+blackFigs.append(figurky.Strelec(True, 2, 0, pole, 0)),
+blackFigs.append(figurky.Strelec(True, 5, 0, pole, 0)),
+whiteFigs.append(figurky.Strelec(False, 2, 7, pole, 0)),
+whiteFigs.append(figurky.Strelec(False, 5, 7, pole, 0))
+blackFigs.append(figurky.Kun(True, 1, 0, pole, 0)),
+blackFigs.append(figurky.Kun(True, 6, 0, pole, 0)),
+whiteFigs.append(figurky.Kun(False, 1, 7, pole, 0)),
+whiteFigs.append(figurky.Kun(False, 6, 7, pole, 0))
+blackFigs.append(figurky.Vez(True, 0, 0, pole, 0)),
+blackFigs.append(figurky.Vez(True, 7, 0, pole, 0)),
+whiteFigs.append(figurky.Vez(False, 0, 7, pole, 0)),
+whiteFigs.append(figurky.Vez(False, 7, 7, pole, 0))
 for i in range(8):
-    blackFigs.append(figurky.Pesak(True, i, 1, pole))
-    whiteFigs.append(figurky.Pesak(False, i, 6, pole))
+    blackFigs.append(figurky.Pesak(True, i, 1, pole, 0))
+    whiteFigs.append(figurky.Pesak(False, i, 6, pole, 0))
 
 fce.vykresli_sachovnici(window, 800)
 fce.vykresli_pole(window, pole)
@@ -161,7 +161,7 @@ while run:
                             pygame.display.update()
     seconds = (pygame.time.get_ticks() - start_ticks) / 1000
     text = font.render(("%02d:%02d" % (math.floor(seconds)/60, math.floor(seconds) % 60)), True, [0, 0, 0])
-    pygame.draw.rect(window, [255, 255, 255], (1300, 355, 65, 30))
+    pygame.draw.rect(window, [255, 255, 255], (1296, 355, 60, 30))
     window.blit(text, [1300, 355])
     pygame.display.update()
 

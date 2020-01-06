@@ -11,6 +11,7 @@ class Figurka:
         self.x = x
         self.y = y
         self.this = pygame.image.load("obrazky/NotFound.png")
+        self.hodnota = 0
 
     def draw(self, window):
         window.blit(self.this, (self.x * 100, self.y * 100))
@@ -23,7 +24,7 @@ class Figurka:
 
 
 class Kral(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_king.png")
@@ -31,6 +32,7 @@ class Kral(Figurka):
             self.this = pygame.image.load("obrazky/white_king.png")
         pole[self.x][self.y] = self
         self.moved = False
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []
@@ -139,13 +141,14 @@ class Kral(Figurka):
 
 
 class Kralovna(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_queen.png")
         else:
             self.this = pygame.image.load("obrazky/white_queen.png")
         pole[self.x][self.y] = self
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []
@@ -229,13 +232,14 @@ class Kralovna(Figurka):
 
 
 class Strelec(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_bishop.png")
         else:
             self.this = pygame.image.load("obrazky/white_bishop.png")
         pole[self.x][self.y] = self
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []
@@ -283,13 +287,14 @@ class Strelec(Figurka):
 
 
 class Kun(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_knight.png")
         else:
             self.this = pygame.image.load("obrazky/white_knight.png")
         pole[self.x][self.y] = self
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []
@@ -315,7 +320,7 @@ class Kun(Figurka):
 
 
 class Vez(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_rook.png")
@@ -323,6 +328,7 @@ class Vez(Figurka):
             self.this = pygame.image.load("obrazky/white_rook.png")
         pole[self.x][self.y] = self
         self.moved = False
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []
@@ -366,13 +372,14 @@ class Vez(Figurka):
 
 
 class Pesak(Figurka):
-    def __init__(self, jecerna, x, y, pole):
+    def __init__(self, jecerna, x, y, pole, hodnota):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_pawn.png")
         else:
             self.this = pygame.image.load("obrazky/white_pawn.png")
         pole[self.x][self.y] = self
+        self.hodnota = hodnota
 
     def kam(self, pole):
         sug = []

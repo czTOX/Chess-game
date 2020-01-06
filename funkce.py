@@ -3,6 +3,7 @@ import pygame
 import tkinter as tk
 import figurky
 from variables import *
+import random
 
 
 # Funkce
@@ -193,3 +194,20 @@ def name_tab(typ):
         button.pack()
 
     okno.mainloop()
+
+
+# ------------------- AI stuff ------------------- *
+def minmax(pole, moves):
+    running_max = 0
+    maximalni = []
+    for i in moves:
+        hodnota = 0
+        if pole[i[1]][i[2]] != '':
+            hodnota = pole[i[1]][i[2]].hodnota
+        if hodnota == running_max:
+            maximalni.append(i)
+        elif hodnota > running_max:
+            running_max = hodnota
+            maximalni.clear()
+            maximalni.append(i)
+    return random.choice(maximalni)
