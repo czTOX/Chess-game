@@ -80,15 +80,22 @@ while run:
                             recover_fig = pole[x][y]
                         if type(item) == figurky.Pesak:
                             item.move2(pole, [x, y])
+
                         else:
                             item.move(pole, [x, y])
                         if ktera_tahne:
+                            if recover_fig is not '':
+                                blackFigs.remove(recover_fig)
                             if fce.je_v_sachu(pole, [kral_b.x, kral_b.y], blackFigs):
-                                print("je v sachu")
+                                print("bily je v sachu")
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
+                                if recover_fig is not '':
+                                    blackFigs.append(recover_fig)
                             else:
+                                if recover_fig is not '':
+                                    blackFigs.append(recover_fig)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
                                 if pole[x][y] is not '':
@@ -105,14 +112,20 @@ while run:
                                     run = False
                                     break
                         else:
+                            if recover_fig is not '':
+                                whiteFigs.remove(recover_fig)
                             if fce.je_v_sachu(pole, [kral_c.x, kral_c.y], whiteFigs):
-                                print("je v sachu")
+                                print("cerny je v sachu")
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
+                                if recover_fig is not '':
+                                    whiteFigs.append(recover_fig)
                             else:
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
+                                if recover_fig is not '':
+                                    whiteFigs.append(recover_fig)
                                 if pole[x][y] is not '':
                                     whiteFigs.remove(pole[x][y])
                                     dead.append(pole[x][y])
@@ -121,7 +134,7 @@ while run:
                                 selected = False
                                 ktera_tahne = not ktera_tahne
                                 fce.refresh(window, pole)
-                                if fce.je_mat(pole, [kral_b.x, kral_b.y], blackFigs, whiteFigs):
+                                if fce.je_mat(pole, [kral_b.x, kral_b.y], whiteFigs, blackFigs):
                                     fce.zapis_skore(seconds)
                                     ctypes.windll.user32.MessageBoxW(0, 'Černý vyhrál! :)', 'Konec hry!', 1)
                                     run = False

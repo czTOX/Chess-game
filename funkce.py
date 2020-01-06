@@ -111,13 +111,22 @@ def block(pole, souradnice, friendly_figs, enemy_figs):
             recover_fig = ''
             if pole[place[0]][place[1]] is not '':
                 recover_fig = pole[place[0]][place[1]]
-            friend.move(pole, [place[0], place[1]])
+                enemy_figs.remove(recover_fig)
+            if type(friend) == figurky.Pesak:
+                friend.move2(pole, [friend.x, friend.y])
+            else:
+                friend.move(pole, [friend.x, friend.y])
+
             if je_v_sachu(pole, souradnice, enemy_figs):
                 friend.move(pole, backup_coords)
                 pole[place[0]][place[1]] = recover_fig
+                if recover_fig is not '':
+                    enemy_figs.append(recover_fig)
             else:
                 friend.move(pole, backup_coords)
                 pole[place[0]][place[1]] = recover_fig
+                if recover_fig is not '':
+                    enemy_figs.append(recover_fig)
                 return True
     return False
 
@@ -134,21 +143,23 @@ def je_mat(pole, souradnice, friendly_figs, enemy_figs):
 def name_tab(typ):
     def play():
         if textbox1.get() != '':
-            names[0] = textbox1.get()
+            print(names)
+            names.append(textbox1.get())
         else:
-            names[0] = 'Player1'
+            names.append('Player1')
         if textbox2.get() != '':
-            names[1] = textbox2.get()
+            names.append(textbox2.get())
         else:
-            names[1] = 'Player2'
+            names.append('Player2')
         okno.destroy()
 
     def play2():
         if textbox1.get() != '':
-            names[0] = textbox1.get()
+            print(names)
+            names.append(textbox1.get())
         else:
-            names[0] = 'Player1'
-        names[1] = 'AI'
+            names.append('Player1')
+        names.append('AI')
         okno.destroy()
 
     okno = tk.Tk()
