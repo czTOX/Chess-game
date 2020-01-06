@@ -81,9 +81,9 @@ def vypis_mrtvych(window, dead):
             posun_white += 30
 
 
-def zapis_skore(jmeno, time):
+def zapis_skore(time):
     zebricek = open("zebricek.txt", "a+")
-    zebricek.write(jmeno + ";" + str(time))
+    zebricek.write(names[0] + ";" + names[1] + ";" + str(time))
     zebricek.close()
 
 
@@ -97,36 +97,88 @@ def je_v_sachu(pole, souradnice, enemy_figs):
                 if souradnice == [fig.x - 1, fig.y - 1] or souradnice == [fig.x + 1, fig.y - 1]:
                     return True
         elif type(fig) == figurky.Kral:
-            sug = []
-            x_kolik = 3
-            y_kolik = 3
-            x_zacatek = fig.x - 1
-            y_zacatek = fig.y - 1
-            if fig.x == 0:
-                x_kolik = 2
-                x_zacatek = fig.x
-            elif fig.x == 7:
-                x_kolik = 2
-            if fig.y == 0:
-                y_kolik = 2
-                y_zacatek = fig.y
-            elif fig.y == 7:
-                y_kolik = 2
-
-            for x in range(x_kolik):
-                for y in range(y_kolik):
-                    if x == fig.x and y == fig.y:
-                        continue
-                    else:
-                        if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][y_zacatek + y].jecerna is not fig.jecerna:
-                            sug.append([x_zacatek + x, y_zacatek + y])
-            if souradnice in sug:
+            if souradnice in fig.kam2(pole):
                 return True
         elif souradnice in fig.kam(pole):
             return True
     return False
 
 
-def je_mat(pole, souradnice, enemy_figs):
+def block(pole, souradnice, friendly_figs, enemy_figs):
+    for friend in friendly_figs:
+        for place in friend.kam(pole):
+            backup_coords = [friend.x, friend.y]
+            recover_fig = ''
+            if pole[place[0]][place[1]] is not '':
+                recover_fig = pole[place[0]][place[1]]
+            friend.move(pole, [place[0], place[1]])
+            if je_v_sachu(pole, souradnice, enemy_figs):
+                friend.move(pole, backup_coords)
+                pole[place[0]][place[1]] = recover_fig
+            else:
+                friend.move(pole, backup_coords)
+                pole[place[0]][place[1]] = recover_fig
+                return True
+    return False
+
+
+def je_mat(pole, souradnice, friendly_figs, enemy_figs):
     # Může se král movnou někam, kde by šach neměl
-    pass
+    if not pole[souradnice[0]][souradnice[1]].kam(pole):
+        # Může šach nějaká figurka zablokovat nebo vyhodit figurku, která mu dává šach
+        if not block(pole, souradnice, friendly_figs, enemy_figs):
+            return True
+    return False
+
+
+def name_tab(typ):
+    def play():
+        if textbox1.get() != '':
+            names[0] = textbox1.get()
+        else:
+            names[0] = 'Player1'
+        if textbox2.get() != '':
+            names[1] = textbox2.get()
+        else:
+            names[1] = 'Player2'
+        okno.destroy()
+
+    def play2():
+        if textbox1.get() != '':
+            names[0] = textbox1.get()
+        else:
+            names[0] = 'Player1'
+        names[1] = 'AI'
+        okno.destroy()
+
+    okno = tk.Tk()
+    okno.geometry('200x100')
+    # Zadání 2 jmen pro multiplayer mód
+    if typ == 0:
+        okno.title('Zadejte jména hráčů')
+
+        label1 = tk.Label(okno, text='Bílá:')
+        label1.pack()
+        textbox1 = tk.Entry(okno)
+        textbox1.focus_set()
+        textbox1.pack()
+        label2 = tk.Label(okno, text='Černá:')
+        label2.pack()
+        textbox2 = tk.Entry(okno)
+        textbox2.pack()
+        button = tk.Button(okno, text='Hrát!', command=play)
+        button.pack()
+
+    # Zadání jména pro hru s AI
+    elif typ == 1:
+        okno.title('Zadej jméno hráče')
+
+        label1 = tk.Label(okno, text='Jméno:')
+        label1.pack()
+        textbox1 = tk.Entry(okno)
+        textbox1.focus_set()
+        textbox1.pack()
+        button = tk.Button(okno, text='Hrát!', command=play2)
+        button.pack()
+
+    okno.mainloop()

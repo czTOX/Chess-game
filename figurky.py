@@ -1,6 +1,6 @@
 import pygame
 import funkce as fce
-from variables import whiteFigs, blackFigs
+from variables import *
 
 
 # Třídy
@@ -72,9 +72,42 @@ class Kral(Figurka):
                         sug.append([self.x-2, self.y])
         pole[self.x][self.y] = ''
         for i in range(len(sug) - 1, -1, -1):
+            if pole[sug[i][0]][sug[i][1]] != '':
+                pole[sug[i][0]][sug[i][1]].jecerna = not pole[sug[i][0]][sug[i][1]].jecerna
             if fce.je_v_sachu(pole, sug[i], enemy_pole):
+                if pole[sug[i][0]][sug[i][1]] != '':
+                    pole[sug[i][0]][sug[i][1]].jecerna = not pole[sug[i][0]][sug[i][1]].jecerna
                 del sug[i]
+            else:
+                if pole[sug[i][0]][sug[i][1]] != '':
+                    pole[sug[i][0]][sug[i][1]].jecerna = not pole[sug[i][0]][sug[i][1]].jecerna
         pole[self.x][self.y] = self
+        return sug
+
+    def kam2(self, pole):
+        sug = []
+        x_kolik = 3
+        y_kolik = 3
+        x_zacatek = self.x - 1
+        y_zacatek = self.y - 1
+        if self.x == 0:
+            x_kolik = 2
+            x_zacatek = self.x
+        elif self.x == 7:
+            x_kolik = 2
+        if self.y == 0:
+            y_kolik = 2
+            y_zacatek = self.y
+        elif self.y == 7:
+            y_kolik = 2
+
+        for x in range(x_kolik):
+            for y in range(y_kolik):
+                if x == self.x and y == self.y:
+                    continue
+                else:
+                    if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][y_zacatek + y].jecerna is not self.jecerna:
+                        sug.append([x_zacatek + x, y_zacatek + y])
         return sug
 
     def move(self, pole, where):
@@ -375,25 +408,47 @@ class Pesak(Figurka):
             if self.y == 7:
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
+                    blackFigs.remove(self)
                     pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole)
+                    blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
+                    blackFigs.remove(self)
                     pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole)
+                    blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Kun':
+                    blackFigs.remove(self)
                     pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole)
+                    blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Vez':
+                    blackFigs.remove(self)
                     pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole)
+                    blackFigs.append(pole[self.x][self.y])
             else:
                 pole[self.x][self.y] = self
         else:
             if self.y == 0:
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
+                    whiteFigs.remove(self)
                     pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole)
+                    whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
+                    whiteFigs.remove(self)
                     pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole)
+                    whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Kun':
+                    whiteFigs.remove(self)
                     pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole)
+                    whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Vez':
+                    whiteFigs.remove(self)
                     pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole)
+                    whiteFigs.append(pole[self.x][self.y])
             else:
                 pole[self.x][self.y] = self
+
+    def move2(self, pole, where):
+        pole[self.x][self.y] = ''
+        self.x = where[0]
+        self.y = where[1]
+        pole[self.x][self.y] = self

@@ -1,3 +1,4 @@
 # Konstanty
 whiteFigs = []
 blackFigs = []
+names = []

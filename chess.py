@@ -4,7 +4,7 @@ import figurky
 import funkce as fce
 import math
 import ctypes
-from variables import whiteFigs, blackFigs
+from variables import *
 
 # Konstanty
 width = 1400
@@ -29,7 +29,9 @@ pole = [['' for x in range(8)] for y in range(8)]
 
 
 kral_c = figurky.Kral(True, 4, 0, pole)
+blackFigs.append(kral_c)
 kral_b = figurky.Kral(False, 4, 7, pole)
+whiteFigs.append(kral_b)
 blackFigs.append(figurky.Kralovna(True, 3, 0, pole))
 whiteFigs.append(figurky.Kralovna(False, 3, 7, pole))
 blackFigs.append(figurky.Strelec(True, 2, 0, pole)),
@@ -76,10 +78,13 @@ while run:
                         recover_fig = ''
                         if pole[x][y] is not '':
                             recover_fig = pole[x][y]
-                        item.move(pole, [x, y])
+                        if type(item) == figurky.Pesak:
+                            item.move2(pole, [x, y])
+                        else:
+                            item.move(pole, [x, y])
                         if ktera_tahne:
                             if fce.je_v_sachu(pole, [kral_b.x, kral_b.y], blackFigs):
-                                # TODO zeptat se jestli je v matu
+                                print("je v sachu")
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
@@ -94,10 +99,14 @@ while run:
                                 selected = False
                                 ktera_tahne = not ktera_tahne
                                 fce.refresh(window, pole)
+                                if fce.je_mat(pole, [kral_c.x, kral_c.y], blackFigs, whiteFigs):
+                                    fce.zapis_skore(seconds)
+                                    ctypes.windll.user32.MessageBoxW(0, 'Bílý vyhrál! :)', 'Konec hry!', 1)
+                                    run = False
+                                    break
                         else:
                             if fce.je_v_sachu(pole, [kral_c.x, kral_c.y], whiteFigs):
-                                # TODO zeptat se jestli je v matu
-                                # TODO odstraňovat figurky z polí whiteFigs, blackFigs
+                                print("je v sachu")
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig
@@ -112,6 +121,11 @@ while run:
                                 selected = False
                                 ktera_tahne = not ktera_tahne
                                 fce.refresh(window, pole)
+                                if fce.je_mat(pole, [kral_b.x, kral_b.y], blackFigs, whiteFigs):
+                                    fce.zapis_skore(seconds)
+                                    ctypes.windll.user32.MessageBoxW(0, 'Černý vyhrál! :)', 'Konec hry!', 1)
+                                    run = False
+                                    break
                     elif pole[x][y] is '' or pole[x][y] is item or pole[x][y].jecerna is ktera_tahne:
                         selected = False
                         fce.refresh(window, pole)
@@ -137,3 +151,5 @@ while run:
     pygame.draw.rect(window, [255, 255, 255], (1300, 355, 65, 30))
     window.blit(text, [1300, 355])
     pygame.display.update()
+
+import scoreboard
