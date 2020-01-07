@@ -416,19 +416,19 @@ class Pesak(Figurka):
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
                     blackFigs.remove(self)
-                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0)
                     blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
                     blackFigs.remove(self)
-                    pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole, 0)
                     blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Kun':
                     blackFigs.remove(self)
-                    pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole, 0)
                     blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Vez':
                     blackFigs.remove(self)
-                    pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole, 0)
                     blackFigs.append(pole[self.x][self.y])
             else:
                 pole[self.x][self.y] = self
@@ -437,19 +437,19 @@ class Pesak(Figurka):
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
                     whiteFigs.remove(self)
-                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0)
                     whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
                     whiteFigs.remove(self)
-                    pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Strelec(self.jecerna, self.x, self.y, pole, 0)
                     whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Kun':
                     whiteFigs.remove(self)
-                    pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Kun(self.jecerna, self.x, self.y, pole, 0)
                     whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Vez':
                     whiteFigs.remove(self)
-                    pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole)
+                    pole[self.x][self.y] = Vez(self.jecerna, self.x, self.y, pole, 0)
                     whiteFigs.append(pole[self.x][self.y])
             else:
                 pole[self.x][self.y] = self

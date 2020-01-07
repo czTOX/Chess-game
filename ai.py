@@ -139,13 +139,21 @@ while run:
                         for place in fig.kam(pole):
                             moznosti.append([fig, place[0], place[1]])
             res = fce.minmax(pole, moznosti)
+            if pole[res[1]][res[2]] is not '':
+                whiteFigs.remove(pole[res[1]][res[2]])
+                dead.append(pole[res[1]][res[2]])
+                fce.vypis_mrtvych(window, dead)
             res[0].move(pole, [res[1], res[2]])
             selected = False
             ktera_tahne = not ktera_tahne
             fce.refresh(window, pole)
+            if fce.je_mat(pole, [kral_b.x, kral_b.y], whiteFigs, blackFigs):
+                ctypes.windll.user32.MessageBoxW(0, 'Černý vyhrál! :)', 'Konec hry!', 1)
+                run = False
+                break
     seconds = (pygame.time.get_ticks() - start_ticks) / 1000
     text = font.render(("%02d:%02d" % (math.floor(seconds)/60, math.floor(seconds) % 60)), True, [0, 0, 0])
-    pygame.draw.rect(window, [255, 255, 255], (1296, 355, 60, 30))
+    pygame.draw.rect(window, [255, 255, 255], (1296, 355, 70, 30))
     window.blit(text, [1300, 355])
     pygame.display.update()
 

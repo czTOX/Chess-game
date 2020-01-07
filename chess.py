@@ -161,7 +161,7 @@ while run:
                             pygame.display.update()
     seconds = (pygame.time.get_ticks() - start_ticks) / 1000
     text = font.render(("%02d:%02d" % (math.floor(seconds)/60, math.floor(seconds) % 60)), True, [0, 0, 0])
-    pygame.draw.rect(window, [255, 255, 255], (1296, 355, 60, 30))
+    pygame.draw.rect(window, [255, 255, 255], (1296, 355, 70, 30))
     window.blit(text, [1300, 355])
     pygame.display.update()
 

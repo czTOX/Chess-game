@@ -11,7 +11,7 @@ def single():
     menu.destroy()
     name_tab(1)
     # TODO zadaní jmen
-    import chess
+    import ai
 
 
 def multi():
