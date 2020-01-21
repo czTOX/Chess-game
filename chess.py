@@ -78,9 +78,8 @@ while run:
                         recover_fig = ''
                         if pole[x][y] is not '':
                             recover_fig = pole[x][y]
-                        if type(item) == figurky.Pesak:
+                        if type(item) == figurky.Pesak or type(item) == figurky.Kral:
                             item.move2(pole, [x, y])
-
                         else:
                             item.move(pole, [x, y])
                         if ktera_tahne:
@@ -111,6 +110,10 @@ while run:
                                     ctypes.windll.user32.MessageBoxW(0, 'Bílý vyhrál! :)', 'Konec hry!', 1)
                                     run = False
                                     break
+                                elif fce.pat(pole, [kral_c.x, kral_c.y], blackFigs, whiteFigs):
+                                    ctypes.windll.user32.MessageBoxW(0, 'Pat! :)', 'Konec hry!', 1)
+                                    run = False
+                                    break
                         else:
                             if recover_fig is not '':
                                 whiteFigs.remove(recover_fig)
@@ -137,6 +140,10 @@ while run:
                                 if fce.je_mat(pole, [kral_b.x, kral_b.y], whiteFigs, blackFigs):
                                     fce.zapis_skore(seconds)
                                     ctypes.windll.user32.MessageBoxW(0, 'Černý vyhrál! :)', 'Konec hry!', 1)
+                                    run = False
+                                    break
+                                elif fce.pat(pole, [kral_b.x, kral_b.y], whiteFigs, blackFigs):
+                                    ctypes.windll.user32.MessageBoxW(0, 'Pat! :)', 'Konec hry!', 1)
                                     run = False
                                     break
                     elif pole[x][y] is '' or pole[x][y] is item or pole[x][y].jecerna is ktera_tahne:

@@ -84,7 +84,7 @@ def vypis_mrtvych(window, dead):
 
 def zapis_skore(time):
     zebricek = open("zebricek.txt", "a+")
-    zebricek.write(names[0] + ";" + names[1] + ";" + str(time))
+    zebricek.write(names[0] + ";" + names[1] + ";" + str(time) + "\n")
     zebricek.close()
 
 
@@ -113,10 +113,10 @@ def block(pole, souradnice, friendly_figs, enemy_figs):
             if pole[place[0]][place[1]] is not '':
                 recover_fig = pole[place[0]][place[1]]
                 enemy_figs.remove(recover_fig)
-            if type(friend) == figurky.Pesak:
-                friend.move2(pole, [friend.x, friend.y])
+            if type(friend) == figurky.Pesak or type(friend) == figurky.Kral:
+                friend.move2(pole, [place[0], place[1]])
             else:
-                friend.move(pole, [friend.x, friend.y])
+                friend.move(pole, [place[0], place[1]])
 
             if je_v_sachu(pole, souradnice, enemy_figs):
                 friend.move(pole, backup_coords)
@@ -133,18 +133,26 @@ def block(pole, souradnice, friendly_figs, enemy_figs):
 
 
 def je_mat(pole, souradnice, friendly_figs, enemy_figs):
-    # Může se král movnou někam, kde by šach neměl
-    if not pole[souradnice[0]][souradnice[1]].kam(pole):
-        # Může šach nějaká figurka zablokovat nebo vyhodit figurku, která mu dává šach
-        if not block(pole, souradnice, friendly_figs, enemy_figs):
-            return True
+    if je_v_sachu(pole, souradnice, enemy_figs):
+        # Může se král movnou někam, kde by šach neměl
+        if not pole[souradnice[0]][souradnice[1]].kam(pole):
+            # Může šach nějaká figurka zablokovat nebo vyhodit figurku, která mu dává šach
+            if block(pole, souradnice, friendly_figs, enemy_figs):
+                return True
+    return False
+
+
+def pat(pole, souradnice, friendly_figs, enemy_figs):
+    if not je_v_sachu(pole, souradnice, enemy_figs):
+        if not pole[souradnice[0]][souradnice[1]].kam(pole):
+            if not block(pole, souradnice, friendly_figs, enemy_figs):
+                return True
     return False
 
 
 def name_tab(typ):
     def play():
         if textbox1.get() != '':
-            print(names)
             names.append(textbox1.get())
         else:
             names.append('Player1')

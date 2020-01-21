@@ -78,7 +78,7 @@ while run:
                         recover_fig = ''
                         if pole[x][y] is not '':
                             recover_fig = pole[x][y]
-                        if type(item) == figurky.Pesak:
+                        if type(item) == figurky.Pesak or type(item) == figurky.Kral:
                             item.move2(pole, [x, y])
 
                         else:
@@ -86,8 +86,8 @@ while run:
                         if ktera_tahne:
                             if recover_fig is not '':
                                 blackFigs.remove(recover_fig)
+                            # Bílý, zda je v šachu
                             if fce.je_v_sachu(pole, [kral_b.x, kral_b.y], blackFigs):
-                                print("bily je v sachu")
                                 ctypes.windll.user32.MessageBoxW(0, 'Takto táhnout nemůžeš. Král je v šachu.', 'Nedovolený tah', 1)
                                 item.move(pole, backup_coords)
                                 pole[x][y] = recover_fig

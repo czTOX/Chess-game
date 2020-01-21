@@ -113,23 +113,23 @@ class Kral(Figurka):
         return sug
 
     def move(self, pole, where):
-        if self.x+2 == where[0]:
-            vez = pole[self.x+3][self.y]
+        if self.x + 2 == where[0]:
+            vez = pole[self.x + 3][self.y]
             pole[self.x][self.y] = ''
             pole[self.x + 3][self.y] = ''
             self.x = where[0]
             self.y = where[1]
-            vez.x = self.x-1
+            vez.x = self.x - 1
             vez.y = self.y
             pole[self.x][self.y] = self
             pole[vez.x][vez.y] = vez
-        elif self.x-2 == where[0]:
-            vez = pole[self.x-4][self.y]
+        elif self.x - 2 == where[0]:
+            vez = pole[self.x - 4][self.y]
             pole[self.x][self.y] = ''
-            pole[self.x-4][self.y] = ''
+            pole[self.x - 4][self.y] = ''
             self.x = where[0]
             self.y = where[1]
-            vez.x = self.x+1
+            vez.x = self.x + 1
             vez.y = self.y
             pole[self.x][self.y] = self
             pole[vez.x][vez.y] = vez
@@ -138,6 +138,12 @@ class Kral(Figurka):
             self.x = where[0]
             self.y = where[1]
             pole[self.x][self.y] = self
+
+    def move2(self, pole, where):
+        pole[self.x][self.y] = ''
+        self.x = where[0]
+        self.y = where[1]
+        pole[self.x][self.y] = self
 
 
 class Kralovna(Figurka):
