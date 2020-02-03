@@ -4,12 +4,11 @@ import ctypes
 import os
 
 
-scoreboard = tk.Tk()
-scoreboard.geometry('400x600')
-scoreboard.title('Scoreboard')
-
 file = open('zebricek.txt', 'r')
 if os.stat("zebricek.txt").st_size != 0:
+    scoreboard = tk.Tk()
+    scoreboard.geometry('400x600')
+    scoreboard.title('Scoreboard')
     for line in file:
         s = line.split(';')
         time = ("%02d:%02d" % (math.floor(float(s[2]))/60, math.floor(float(s[2])) % 60))

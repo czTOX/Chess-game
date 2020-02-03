@@ -132,13 +132,8 @@ while run:
                             fce.vyresli_moznosti(window, sug)
                             pygame.display.update()
         if not ktera_tahne:
-            moznosti = []
-            for x in pole:
-                for fig in x:
-                    if fig != '' and fig.jecerna:
-                        for place in fig.kam(pole):
-                            moznosti.append([fig, place[0], place[1]])
-            res = fce.minmax(pole, moznosti)
+            value, res = fce.minimax(pole, 2, True)
+            print(value)
             if pole[res[1]][res[2]] is not '':
                 whiteFigs.remove(pole[res[1]][res[2]])
                 dead.append(pole[res[1]][res[2]])

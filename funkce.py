@@ -205,17 +205,102 @@ def name_tab(typ):
 
 
 # ------------------- AI stuff ------------------- *
-def minmax(pole, moves):
-    running_max = 0
-    maximalni = []
-    for i in moves:
-        hodnota = 0
-        if pole[i[1]][i[2]] != '':
-            hodnota = pole[i[1]][i[2]].hodnota
-        if hodnota == running_max:
-            maximalni.append(i)
-        elif hodnota > running_max:
-            running_max = hodnota
-            maximalni.clear()
-            maximalni.append(i)
-    return random.choice(maximalni)
+def minimax(pole, hloubka, ismax):
+    # Pokud už dosáhl určité hloubky
+    if hloubka == 0:
+        # Parametr ismax předastavuje atribut jecerna
+        if ismax:
+            hodnota = -1
+            best_move = []
+            for move in get_moves(pole, ismax):
+                if pole[move[1]][move[2]] == '':
+                    if hodnota < 0:
+                        hodnota = 0
+                        best_move = move
+                elif pole[move[1]][move[2]].hodnota > hodnota:
+                    hodnota = pole[move[1]][move[2]].hodnota
+                    best_move = move
+            return hodnota, best_move
+
+    if ismax:
+        hodnota = -1
+        best_move = []
+        for move in get_moves(pole, False):
+            backup_coords = [move[0].x, move[0].y]
+            recover_fig = ''
+            if pole[move[1]][move[2]] is not '':
+                recover_fig = pole[move[1]][move[2]]
+            move[0].move(pole, [move[1], move[2]])
+            hodnota_vetve = minimax(pole, hloubka-1, False)
+            if hodnota < hodnota_vetve:
+                hodnota = hodnota_vetve
+                best_move = move
+            # Move back
+            move[0].move(pole, backup_coords)
+            pole[move[1]][move[2]] = recover_fig
+        return hodnota, best_move
+    else:
+        hodnota = 9999
+        for move in get_moves(pole, True):
+            backup_coords = [move[0].x, move[0].y]
+            recover_fig = ''
+            if pole[move[1]][move[2]] is not '':
+                recover_fig = pole[move[1]][move[2]]
+            move[0].move(pole, [move[1], move[2]])
+            hodnota_vetve = minimax(pole, hloubka-1, False)
+            if hodnota > hodnota_vetve:
+                hodnota = hodnota_vetve
+            # Move back
+            move[0].move(pole, backup_coords)
+            pole[move[1]][move[2]] = recover_fig
+        return hodnota
+
+
+def get_moves(pole, jecerna):
+    moznosti = []
+    for x in pole:
+        for fig in x:
+            if fig != '':
+                if fig.jecerna == jecerna:
+                    for place in fig.kam(pole):
+                        moznosti.append([fig, place[0], place[1]])
+                else:
+                    for place in fig.kam(pole):
+                        moznosti.append([fig, place[0], place[1]])
+    return moznosti
+
+
+def idk(pole, maximize, depth):
+    if depth == 0:
+        value = []
+        moves = get_moves(pole)
+        for i in moves:
+            hodnota = 0
+            if pole[i[1]][i[2]] != '':
+                hodnota = pole[i[1]][i[2]].hodnota
+            if hodnota > value:
+                value.append(value, i)
+        return value       # Vrátí nejlepší větev
+    else:
+        maximum = 0
+        moves = get_moves(pole)
+        if maximize:
+            for each in moves:
+                # Předělat pole aby se nezadávalo pořád stejné
+                new = each[0].move(pole, [each[1], each[2]])
+                value = idk(new, False, depth-1)
+                if value > maximum:
+                    maximum = value
+
+                #
+        else:
+            for each in moves:
+                # Předělat pole aby se nezadávalo pořád stejné
+                new = each[0].move(pole, [each[1], each[2]])
+                value = idk(new, True, depth-1)
+                if value > maximum:
+                    maximum = value
+    return maximum
+
+
+
