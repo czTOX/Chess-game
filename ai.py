@@ -132,13 +132,30 @@ while run:
                             fce.vyresli_moznosti(window, sug)
                             pygame.display.update()
         if not ktera_tahne:
-            value, res = fce.minimax(pole, 2, True)
-            print(value)
-            if pole[res[1]][res[2]] is not '':
-                whiteFigs.remove(pole[res[1]][res[2]])
-                dead.append(pole[res[1]][res[2]])
+            # Movnout => zapsat hodnotu => porovnat a popřípadě uložit move
+            hodnota = math.inf
+            best_move = []
+            for fig in blackFigs:
+                for move in fig.kam(pole):
+                    backup_coords = [fig.x, fig.y]
+                    recover_fig = pole[move[0]][move[1]]
+                    if type(fig) == figurky.Pesak or type(fig) == figurky.Kral:
+                        fig.move2(pole, move)
+                    else:
+                        fig.move(pole, move)
+                    # Sudé a 0 == False, Liché == True
+                    pomocna = fce.minimax(pole, 4, True, -math.inf, math.inf)
+                    fig.move(pole, backup_coords)
+                    pole[move[0]][move[1]] = recover_fig
+                    if hodnota > pomocna:
+                        hodnota = pomocna
+                        best_move = [fig, move[0], move[1]]
+            print(hodnota)
+            if pole[best_move[1]][best_move[2]] is not '':
+                whiteFigs.remove(pole[best_move[1]][best_move[2]])
+                dead.append(pole[best_move[1]][best_move[2]])
                 fce.vypis_mrtvych(window, dead)
-            res[0].move(pole, [res[1], res[2]])
+            best_move[0].move(pole, [best_move[1], best_move[2]])
             selected = False
             ktera_tahne = not ktera_tahne
             fce.refresh(window, pole)
