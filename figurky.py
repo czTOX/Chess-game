@@ -12,6 +12,7 @@ class Figurka:
         self.y = y
         self.this = pygame.image.load("obrazky/NotFound.png")
         self.hodnota = 0
+        self.hodnotapozice = []
 
     def draw(self, window):
         window.blit(self.this, (self.x * 100, self.y * 100))
@@ -28,18 +29,38 @@ class Kral(Figurka):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_king.png")
+            self.hodnotapozice = [
+                [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0],
+                [2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0],
+                [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
+                [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+            ]
         else:
             self.this = pygame.image.load("obrazky/white_king.png")
+            self.hodnotapozice = [
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+                [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
+                [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
+                [2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0],
+                [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0]
+            ]
         pole[self.x][self.y] = self
         self.moved = False
-        self.hodnota = hodnota
+        self.hodnota = 900
 
     def kam(self, pole):
         sug = []
         x_kolik = 3
         y_kolik = 3
-        x_zacatek = self.x-1
-        y_zacatek = self.y-1
+        x_zacatek = self.x - 1
+        y_zacatek = self.y - 1
         if self.x == 0:
             x_kolik = 2
             x_zacatek = self.x
@@ -56,22 +77,29 @@ class Kral(Figurka):
                 if x == self.x and y == self.y:
                     continue
                 else:
-                    if pole[x_zacatek+x][y_zacatek+y] is '' or pole[x_zacatek+x][y_zacatek+y].jecerna is not self.jecerna:
-                        sug.append([x_zacatek+x, y_zacatek+y])
+                    if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][
+                        y_zacatek + y].jecerna is not self.jecerna:
+                        sug.append([x_zacatek + x, y_zacatek + y])
         if self.jecerna:
             enemy_pole = whiteFigs
         else:
             enemy_pole = blackFigs
         # Rošáda
         if not self.moved:
-            if self.x+3 <= 7 and type(pole[self.x+3][self.y]) == Vez:   # Krátká rošáda na pravou stranu
-                if pole[self.x+1][self.y] == '' and pole[self.x+2][self.y] == '':
-                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x+1, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x+2, self.y], enemy_pole):
-                        sug.append([self.x+2, self.y])
-            if self.x-4 >= 0 and type(pole[self.x-4][self.y]) == Vez:   # Dlouhá rošáda na levou stranu
-                if pole[self.x-1][self.y] == '' and pole[self.x-2][self.y] == '' and pole[self.x-3][self.y] == '':
-                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-1, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x-2, self.y], enemy_pole):
-                        sug.append([self.x-2, self.y])
+            if self.x + 3 <= 7 and type(pole[self.x + 3][self.y]) == Vez:  # Krátká rošáda na pravou stranu
+                if pole[self.x + 1][self.y] == '' and pole[self.x + 2][self.y] == '':
+                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x + 1,
+                                                                                                            self.y],
+                                                                                                     enemy_pole) and not fce.je_v_sachu(
+                        pole, [self.x + 2, self.y], enemy_pole):
+                        sug.append([self.x + 2, self.y])
+            if self.x - 4 >= 0 and type(pole[self.x - 4][self.y]) == Vez:  # Dlouhá rošáda na levou stranu
+                if pole[self.x - 1][self.y] == '' and pole[self.x - 2][self.y] == '' and pole[self.x - 3][self.y] == '':
+                    if not fce.je_v_sachu(pole, [self.x, self.y], enemy_pole) and not fce.je_v_sachu(pole, [self.x - 1,
+                                                                                                            self.y],
+                                                                                                     enemy_pole) and not fce.je_v_sachu(
+                        pole, [self.x - 2, self.y], enemy_pole):
+                        sug.append([self.x - 2, self.y])
         pole[self.x][self.y] = ''
         for i in range(len(sug) - 1, -1, -1):
             if pole[sug[i][0]][sug[i][1]] != '':
@@ -108,7 +136,8 @@ class Kral(Figurka):
                 if x == self.x and y == self.y:
                     continue
                 else:
-                    if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][y_zacatek + y].jecerna is not self.jecerna:
+                    if pole[x_zacatek + x][y_zacatek + y] is '' or pole[x_zacatek + x][
+                        y_zacatek + y].jecerna is not self.jecerna:
                         sug.append([x_zacatek + x, y_zacatek + y])
         return sug
 
@@ -154,11 +183,21 @@ class Kralovna(Figurka):
         else:
             self.this = pygame.image.load("obrazky/white_queen.png")
         pole[self.x][self.y] = self
-        self.hodnota = hodnota
+        self.hodnota = 90
+        self.hodnotapozice = [
+            [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
+            [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
+            [-1.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0],
+            [-0.5, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -0.5],
+            [0.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -0.5],
+            [-1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0],
+            [-1.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, -1.0],
+            [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
+        ]
 
     def kam(self, pole):
         sug = []
-        x, y = self.x+1, self.y+1
+        x, y = self.x + 1, self.y + 1
         while x <= 7 and y <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -168,7 +207,7 @@ class Kralovna(Figurka):
                 break
             x += 1
             y += 1
-        x, y = self.x-1, self.y+1
+        x, y = self.x - 1, self.y + 1
         while x >= 0 and y <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -178,7 +217,7 @@ class Kralovna(Figurka):
                 break
             x -= 1
             y += 1
-        x, y = self.x-1, self.y-1
+        x, y = self.x - 1, self.y - 1
         while x >= 0 and y >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -188,7 +227,7 @@ class Kralovna(Figurka):
                 break
             x -= 1
             y -= 1
-        x, y = self.x+1, self.y-1
+        x, y = self.x + 1, self.y - 1
         while x <= 7 and y >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -242,14 +281,34 @@ class Strelec(Figurka):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_bishop.png")
+            self.hodnotapozice = [
+                [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
+                [-1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, -1.0],
+                [-1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0],
+                [-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -1.0],
+                [-1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, -1.0],
+                [-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0, -1.0],
+                [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
+                [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
+            ]
         else:
             self.this = pygame.image.load("obrazky/white_bishop.png")
+            self.hodnotapozice = [
+                [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
+                [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
+                [-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0, -1.0],
+                [-1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, -1.0],
+                [-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -1.0],
+                [-1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0],
+                [-1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, -1.0],
+                [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
+            ]
         pole[self.x][self.y] = self
-        self.hodnota = hodnota
+        self.hodnota = 30
 
     def kam(self, pole):
         sug = []
-        x, y = self.x+1, self.y+1
+        x, y = self.x + 1, self.y + 1
         while x <= 7 and y <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -259,7 +318,7 @@ class Strelec(Figurka):
                 break
             x += 1
             y += 1
-        x, y = self.x-1, self.y+1
+        x, y = self.x - 1, self.y + 1
         while x >= 0 and y <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -269,7 +328,7 @@ class Strelec(Figurka):
                 break
             x -= 1
             y += 1
-        x, y = self.x-1, self.y-1
+        x, y = self.x - 1, self.y - 1
         while x >= 0 and y >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -279,7 +338,7 @@ class Strelec(Figurka):
                 break
             x -= 1
             y -= 1
-        x, y = self.x+1, self.y-1
+        x, y = self.x + 1, self.y - 1
         while x <= 7 and y >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -300,27 +359,45 @@ class Kun(Figurka):
         else:
             self.this = pygame.image.load("obrazky/white_knight.png")
         pole[self.x][self.y] = self
-        self.hodnota = hodnota
+        self.hodnota = 30
+        self.hodnotapozice = [
+            [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
+            [-4.0, -2.0, 0.0, 0.0, 0.0, 0.0, -2.0, -4.0],
+            [-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0],
+            [-3.0, 0.5, 1.5, 2.0, 2.0, 1.5, 0.5, -3.0],
+            [-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.0, -3.0],
+            [-3.0, 0.5, 1.0, 1.5, 1.5, 1.0, 0.5, -3.0],
+            [-4.0, -2.0, 0.0, 0.5, 0.5, 0.0, -2.0, -4.0],
+            [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
+        ]
 
     def kam(self, pole):
         sug = []
         # TODO Tohle oprav (je to prostě zrůdnost ale funguje to xD)
-        if self.x+1 <= 7 and self.y-2 >= 0 and (pole[self.x+1][self.y-2] is '' or pole[self.x+1][self.y-2].jecerna is not self.jecerna):
-            sug.append([self.x+1, self.y-2])
-        if self.x+2 <= 7 and self.y-1 >= 0 and (pole[self.x+2][self.y-1] is '' or pole[self.x+2][self.y-1].jecerna is not self.jecerna):
-            sug.append([self.x+2, self.y-1])
-        if self.x+2 <= 7 and self.y+1 <= 7 and (pole[self.x+2][self.y+1] is '' or pole[self.x+2][self.y+1].jecerna is not self.jecerna):
-            sug.append([self.x+2, self.y+1])
-        if self.x+1 <= 7 and self.y+2 <= 7 and (pole[self.x+1][self.y+2] is '' or pole[self.x+1][self.y+2].jecerna is not self.jecerna):
-            sug.append([self.x+1, self.y+2])
-        if self.x-1 >= 0 and self.y+2 <= 7 and (pole[self.x-1][self.y+2] is '' or pole[self.x-1][self.y+2].jecerna is not self.jecerna):
-            sug.append([self.x-1, self.y+2])
-        if self.x-2 >= 0 and self.y+1 <= 7 and (pole[self.x-2][self.y+1] is '' or pole[self.x-2][self.y+1].jecerna is not self.jecerna):
-            sug.append([self.x-2, self.y+1])
-        if self.x-2 >= 0 and self.y-1 >= 0 and (pole[self.x-2][self.y-1] is '' or pole[self.x-2][self.y-1].jecerna is not self.jecerna):
-            sug.append([self.x-2, self.y-1])
-        if self.x-1 >= 0 and self.y-2 >= 0 and (pole[self.x-1][self.y-2] is '' or pole[self.x-1][self.y-2].jecerna is not self.jecerna):
-            sug.append([self.x-1, self.y-2])
+        if self.x + 1 <= 7 and self.y - 2 >= 0 and (
+                pole[self.x + 1][self.y - 2] is '' or pole[self.x + 1][self.y - 2].jecerna is not self.jecerna):
+            sug.append([self.x + 1, self.y - 2])
+        if self.x + 2 <= 7 and self.y - 1 >= 0 and (
+                pole[self.x + 2][self.y - 1] is '' or pole[self.x + 2][self.y - 1].jecerna is not self.jecerna):
+            sug.append([self.x + 2, self.y - 1])
+        if self.x + 2 <= 7 and self.y + 1 <= 7 and (
+                pole[self.x + 2][self.y + 1] is '' or pole[self.x + 2][self.y + 1].jecerna is not self.jecerna):
+            sug.append([self.x + 2, self.y + 1])
+        if self.x + 1 <= 7 and self.y + 2 <= 7 and (
+                pole[self.x + 1][self.y + 2] is '' or pole[self.x + 1][self.y + 2].jecerna is not self.jecerna):
+            sug.append([self.x + 1, self.y + 2])
+        if self.x - 1 >= 0 and self.y + 2 <= 7 and (
+                pole[self.x - 1][self.y + 2] is '' or pole[self.x - 1][self.y + 2].jecerna is not self.jecerna):
+            sug.append([self.x - 1, self.y + 2])
+        if self.x - 2 >= 0 and self.y + 1 <= 7 and (
+                pole[self.x - 2][self.y + 1] is '' or pole[self.x - 2][self.y + 1].jecerna is not self.jecerna):
+            sug.append([self.x - 2, self.y + 1])
+        if self.x - 2 >= 0 and self.y - 1 >= 0 and (
+                pole[self.x - 2][self.y - 1] is '' or pole[self.x - 2][self.y - 1].jecerna is not self.jecerna):
+            sug.append([self.x - 2, self.y - 1])
+        if self.x - 1 >= 0 and self.y - 2 >= 0 and (
+                pole[self.x - 1][self.y - 2] is '' or pole[self.x - 1][self.y - 2].jecerna is not self.jecerna):
+            sug.append([self.x - 1, self.y - 2])
 
         return sug
 
@@ -330,15 +407,36 @@ class Vez(Figurka):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_rook.png")
+            self.hodnotapozice = [
+                [0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5],
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            ]
         else:
             self.this = pygame.image.load("obrazky/white_rook.png")
+            self.hodnotapozice = [
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                [0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
+                [0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0]
+            ]
+
         pole[self.x][self.y] = self
         self.moved = False
-        self.hodnota = hodnota
+        self.hodnota = 50
 
     def kam(self, pole):
         sug = []
-        x, y = self.x+1, self.y
+        x, y = self.x + 1, self.y
         while x <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -347,7 +445,7 @@ class Vez(Figurka):
                     sug.append([x, y])
                 break
             x += 1
-        x = self.x-1
+        x = self.x - 1
         while x >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -356,7 +454,7 @@ class Vez(Figurka):
                     sug.append([x, y])
                 break
             x -= 1
-        x, y = self.x, self.y+1
+        x, y = self.x, self.y + 1
         while y <= 7:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -365,7 +463,7 @@ class Vez(Figurka):
                     sug.append([x, y])
                 break
             y += 1
-        y = self.y-1
+        y = self.y - 1
         while y >= 0:
             if pole[x][y] is '':
                 sug.append([x, y])
@@ -382,35 +480,55 @@ class Pesak(Figurka):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_pawn.png")
+            self.hodnotapozice = [
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5],
+                [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5],
+                [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0],
+                [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5],
+                [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0],
+                [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            ]
         else:
             self.this = pygame.image.load("obrazky/white_pawn.png")
+            self.hodnotapozice = [
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
+                [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0],
+                [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5],
+                [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0],
+                [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5],
+                [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5],
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            ]
         pole[self.x][self.y] = self
-        self.hodnota = hodnota
+        self.hodnota = 10
 
     def kam(self, pole):
         sug = []
         if self.jecerna:
-            if pole[self.x][self.y+1] is '':
-                if self.y is 1 and pole[self.x][self.y+2] is '':
-                    sug.append([self.x, self.y+2])
-                sug.append([self.x, self.y+1])
+            if pole[self.x][self.y + 1] is '':
+                if self.y is 1 and pole[self.x][self.y + 2] is '':
+                    sug.append([self.x, self.y + 2])
+                sug.append([self.x, self.y + 1])
             if self.x != 7:
-                if pole[self.x+1][self.y+1] is not '' and pole[self.x+1][self.y+1].jecerna is not self.jecerna:
-                    sug.append([self.x+1, self.y+1])
+                if pole[self.x + 1][self.y + 1] is not '' and pole[self.x + 1][self.y + 1].jecerna is not self.jecerna:
+                    sug.append([self.x + 1, self.y + 1])
             if self.x != 0:
-                if pole[self.x-1][self.y+1] is not '' and pole[self.x-1][self.y+1].jecerna is not self.jecerna:
-                    sug.append([self.x-1, self.y+1])
+                if pole[self.x - 1][self.y + 1] is not '' and pole[self.x - 1][self.y + 1].jecerna is not self.jecerna:
+                    sug.append([self.x - 1, self.y + 1])
         else:
-            if pole[self.x][self.y-1] is '':
-                if self.y is 6 and pole[self.x][self.y-2] is '':
-                    sug.append([self.x, self.y-2])
-                sug.append([self.x, self.y-1])
+            if pole[self.x][self.y - 1] is '':
+                if self.y is 6 and pole[self.x][self.y - 2] is '':
+                    sug.append([self.x, self.y - 2])
+                sug.append([self.x, self.y - 1])
             if self.x != 0:
-                if pole[self.x-1][self.y-1] is not '' and pole[self.x-1][self.y-1].jecerna is not self.jecerna:
-                    sug.append([self.x-1, self.y-1])
+                if pole[self.x - 1][self.y - 1] is not '' and pole[self.x - 1][self.y - 1].jecerna is not self.jecerna:
+                    sug.append([self.x - 1, self.y - 1])
             if self.x != 7:
-                if pole[self.x+1][self.y-1] is not '' and pole[self.x+1][self.y-1].jecerna is not self.jecerna:
-                    sug.append([self.x+1, self.y-1])
+                if pole[self.x + 1][self.y - 1] is not '' and pole[self.x + 1][self.y - 1].jecerna is not self.jecerna:
+                    sug.append([self.x + 1, self.y - 1])
         return sug
 
     def move(self, pole, where):

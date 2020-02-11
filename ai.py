@@ -5,6 +5,7 @@ import funkce as fce
 import math
 import ctypes
 from variables import *
+import tkinter as tk
 
 # Konstanty
 width = 1400
@@ -15,6 +16,7 @@ sug = []
 ktera_tahne = True
 item = figurky.Figurka
 sach = False
+obtiznost = names[2].get()
 
 
 pygame.init()
@@ -73,7 +75,6 @@ while run:
             if x <= 7:
                 if selected:
                     if [x, y] in sug:
-                        # TODO přidat rámeček kolem hráče, ať jde vidět kdo je na tahu
                         backup_coords = [item.x, item.y]
                         recover_fig = ''
                         if pole[x][y] is not '':
@@ -143,8 +144,7 @@ while run:
                         fig.move2(pole, move)
                     else:
                         fig.move(pole, move)
-                    # Sudé a 0 == False, Liché == True
-                    pomocna = fce.minimax(pole, 4, True, -math.inf, math.inf)
+                    pomocna = fce.minimax(pole, obtiznost, True, -math.inf, math.inf)
                     fig.move(pole, backup_coords)
                     pole[move[0]][move[1]] = recover_fig
                     if hodnota > pomocna:

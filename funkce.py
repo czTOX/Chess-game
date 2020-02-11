@@ -165,11 +165,12 @@ def name_tab(typ):
 
     def play2():
         if textbox1.get() != '':
-            print(names)
             names.append(textbox1.get())
         else:
             names.append('Player1')
         names.append('AI')
+
+        names.append(obtiznost)
         okno.destroy()
 
     okno = tk.Tk()
@@ -192,6 +193,8 @@ def name_tab(typ):
 
     # Zadání jména pro hru s AI
     elif typ == 1:
+        okno.geometry('200x250')
+        obtiznost = tk.IntVar()
         okno.title('Zadej jméno hráče')
 
         label1 = tk.Label(okno, text='Jméno:')
@@ -199,6 +202,13 @@ def name_tab(typ):
         textbox1 = tk.Entry(okno)
         textbox1.focus_set()
         textbox1.pack()
+        lehke = tk.Radiobutton(okno, text='Lehká', variable=obtiznost, value=1)
+        lehke.select()
+        lehke.pack()
+        stredni = tk.Radiobutton(okno, text='Střední', variable=obtiznost, value=2)
+        stredni.pack()
+        tezke = tk.Radiobutton(okno, text='Těžká', variable=obtiznost, value=3)
+        tezke.pack()
         button = tk.Button(okno, text='Hrát!', command=play2)
         button.pack()
 
@@ -276,10 +286,14 @@ def get_moves(pole, jecerna):
 
 def ohodnoceni(pole):
     soucet = 0
-    for x in pole:
-        for y in x:
-            if y is not '':
-                soucet += y.hodnota
+    for x in range(8):
+        for y in range(8):
+            if pole[x][y] is not '':
+                item = pole[x][y]
+                if pole[x][y].jecerna:
+                    soucet += (item.hodnota + item.hodnotapozice[x][y]) * (-1)
+                else:
+                    soucet += item.hodnota + item.hodnotapozice[x][y]
     return soucet
 
 
