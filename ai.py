@@ -136,6 +136,8 @@ while run:
             # Movnout => zapsat hodnotu => porovnat a popřípadě uložit move
             hodnota = math.inf
             best_move = []
+            alfa = -math.inf
+            beta = math.inf
             for fig in blackFigs:
                 for move in fig.kam(pole):
                     backup_coords = [fig.x, fig.y]
@@ -144,12 +146,23 @@ while run:
                         fig.move2(pole, move)
                     else:
                         fig.move(pole, move)
-                    pomocna = fce.minimax(pole, obtiznost, True, -math.inf, math.inf)
+                    a = fce.stav(pole)
+                    if a == -1:
+                        pomocna = -math.inf
+                    elif a == 1:
+                        pomocna = math.inf
+                    elif a == 2:
+                        pomocna = -50
+                    else:
+                        pomocna = fce.minimax(pole, obtiznost, True, alfa, beta)
                     fig.move(pole, backup_coords)
                     pole[move[0]][move[1]] = recover_fig
                     if hodnota > pomocna:
                         hodnota = pomocna
                         best_move = [fig, move[0], move[1]]
+                    beta = min(beta, pomocna)
+                    if beta <= alfa:
+                        break
             print(hodnota)
             if pole[best_move[1]][best_move[2]] is not '':
                 whiteFigs.remove(pole[best_move[1]][best_move[2]])
