@@ -28,9 +28,9 @@ window.blit(background, [800, 0])
 pole = [['' for x in range(8)] for y in range(8)]
 
 
-kral_c = figurky.Kral(True, 4, 0, pole, 0)
+kral_c = figurky.Kral(True, 4, 0, pole)
 blackFigs.append(kral_c)
-kral_b = figurky.Kral(False, 4, 7, pole, 0)
+kral_b = figurky.Kral(False, 4, 7, pole)
 whiteFigs.append(kral_b)
 blackFigs.append(figurky.Kralovna(True, 3, 0, pole, 0))
 whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 0))
@@ -73,7 +73,6 @@ while run:
             if x <= 7:
                 if selected:
                     if [x, y] in sug:
-                        # TODO přidat rámeček kolem hráče, ať jde vidět kdo je na tahu
                         backup_coords = [item.x, item.y]
                         recover_fig = ''
                         if pole[x][y] is not '':

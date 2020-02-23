@@ -4,7 +4,7 @@ import tkinter as tk
 import figurky
 from variables import *
 import math
-import random
+from figurky import souradnice_b, souradnice_c
 
 
 # Funkce
@@ -218,8 +218,17 @@ def name_tab(typ):
 # ------------------- AI stuff ------------------- *
 def minimax(pole, hloubka, ismax, alfa, beta):
     # Báze
-    if hloubka == 1:
-        return ohodnoceni(pole)
+    if hloubka == 1 or (stav(pole) != 0):
+        a = stav(pole)
+        # TODO i dont fucking know how this works so I am so fucking stupid, change later
+        if a == 0:
+            return ohodnoceni(pole)
+        elif a == 1:
+            return math.inf
+        elif a == -1:
+            return -math.inf
+        else:
+            return -50
 
     # else:
     if ismax:           # Maximalizující tah
@@ -232,15 +241,7 @@ def minimax(pole, hloubka, ismax, alfa, beta):
                 item.move2(pole, [move[1], move[2]])
             else:
                 item.move(pole, [move[1], move[2]])
-            a = stav(pole)
-            if a == -1:
-                pomocna = -math.inf
-            elif a == 1:
-                pomocna = math.inf
-            elif a == 2:
-                pomocna = -50
-            else:
-                pomocna = minimax(pole, hloubka - 1, False, alfa, beta)
+            pomocna = minimax(pole, hloubka - 1, False, alfa, beta)
             item.move(pole, backup_coords)
             pole[move[1]][move[2]] = recover_fig
             hodnota = max(hodnota, pomocna)
@@ -259,15 +260,7 @@ def minimax(pole, hloubka, ismax, alfa, beta):
                 item.move2(pole, [move[1], move[2]])
             else:
                 item.move(pole, [move[1], move[2]])
-            a = stav(pole)
-            if a == -1:
-                pomocna = -math.inf
-            elif a == 1:
-                pomocna = math.inf
-            elif a == 2:
-                pomocna = -50
-            else:
-                pomocna = minimax(pole, hloubka - 1, True, alfa, beta)
+            pomocna = minimax(pole, hloubka - 1, True, alfa, beta)
             item.move(pole, backup_coords)
             pole[move[1]][move[2]] = recover_fig
             hodnota = min(hodnota, pomocna)
@@ -307,9 +300,9 @@ def ohodnoceni(pole):
             if pole[x][y] is not '':
                 item = pole[x][y]
                 if pole[x][y].jecerna:
-                    soucet += (item.hodnota + item.hodnotapozice[x][y]) * (-1)
+                    soucet += (item.hodnota + item.hodnotapozice[x][y])
                 else:
-                    soucet += item.hodnota + item.hodnotapozice[x][y]
+                    soucet += (item.hodnota + item.hodnotapozice[x][y]) * (-1)
     return soucet
 
 
@@ -318,21 +311,20 @@ def stav(pole):
     # Černy výhra   1
     # Pat           2
     # Nic           0
-    if not pole[souradnice_b[0]][souradnice_b[1]].kam(pole):
-        if je_v_sachu(pole, souradnice_b, blackFigs):
-            if block(pole, souradnice_b, whiteFigs, blackFigs):
+    if not pole[figurky.souradnice_b[0]][figurky.souradnice_b[1]].kam(pole):
+        if je_v_sachu(pole, figurky.souradnice_b, blackFigs):
+            if block(pole, figurky.souradnice_b, whiteFigs, blackFigs):
                 return 1
         else:
-            if not block(pole, souradnice_b, whiteFigs, blackFigs):
+            if not block(pole, figurky.souradnice_b, whiteFigs, blackFigs):
                 return 2
 
-    print(souradnice_c, pole[souradnice_c[0]][souradnice_c[1]])
-    if not pole[souradnice_c[0]][souradnice_c[1]].kam(pole):
-        if je_v_sachu(pole, souradnice_c, whiteFigs):
-            if block(pole, souradnice_c, blackFigs, whiteFigs):
+    if not pole[figurky.souradnice_c[0]][figurky.souradnice_c[1]].kam(pole):
+        if je_v_sachu(pole, figurky.souradnice_c, whiteFigs):
+            if block(pole, figurky.souradnice_c, blackFigs, whiteFigs):
                 return -1
         else:
-            if not block(pole, souradnice_c, blackFigs, whiteFigs):
+            if not block(pole, figurky.souradnice_c, blackFigs, whiteFigs):
                 return 2
 
     return 0

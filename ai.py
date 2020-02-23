@@ -1,10 +1,10 @@
 # Knihovny
 import pygame
+from variables import *
 import figurky
 import funkce as fce
 import math
 import ctypes
-from variables import *
 import tkinter as tk
 
 # Konstanty
@@ -30,9 +30,9 @@ window.blit(background, [800, 0])
 pole = [['' for x in range(8)] for y in range(8)]
 
 
-kral_c = figurky.Kral(True, 4, 0, pole, -900)
+kral_c = figurky.Kral(True, 4, 0, pole)
 blackFigs.append(kral_c)
-kral_b = figurky.Kral(False, 4, 7, pole, 900)
+kral_b = figurky.Kral(False, 4, 7, pole)
 whiteFigs.append(kral_b)
 blackFigs.append(figurky.Kralovna(True, 3, 0, pole, -90))
 whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 90))
@@ -81,7 +81,6 @@ while run:
                             recover_fig = pole[x][y]
                         if type(item) == figurky.Pesak or type(item) == figurky.Kral:
                             item.move2(pole, [x, y])
-
                         else:
                             item.move(pole, [x, y])
                         if ktera_tahne:
@@ -134,10 +133,11 @@ while run:
                             pygame.display.update()
         if not ktera_tahne:
             # Movnout => zapsat hodnotu => porovnat a popřípadě uložit move
-            hodnota = math.inf
+            hodnota = -math.inf
             best_move = []
             alfa = -math.inf
             beta = math.inf
+            # TODO jevsachu here
             for fig in blackFigs:
                 for move in fig.kam(pole):
                     backup_coords = [fig.x, fig.y]
@@ -146,24 +146,17 @@ while run:
                         fig.move2(pole, move)
                     else:
                         fig.move(pole, move)
-                    a = fce.stav(pole)
-                    if a == -1:
-                        pomocna = -math.inf
-                    elif a == 1:
-                        pomocna = math.inf
-                    elif a == 2:
-                        pomocna = -50
-                    else:
-                        pomocna = fce.minimax(pole, obtiznost, True, alfa, beta)
+                    pomocna = fce.minimax(pole, obtiznost, False, alfa, beta)
                     fig.move(pole, backup_coords)
                     pole[move[0]][move[1]] = recover_fig
-                    if hodnota > pomocna:
+                    if hodnota < pomocna:
                         hodnota = pomocna
                         best_move = [fig, move[0], move[1]]
-                    beta = min(beta, pomocna)
+                    alfa = max(alfa, pomocna)
                     if beta <= alfa:
                         break
-            print(hodnota)
+            print(hodnota, best_move)
+            # TODO tady někde se ptát na mat
             if pole[best_move[1]][best_move[2]] is not '':
                 whiteFigs.remove(pole[best_move[1]][best_move[2]])
                 dead.append(pole[best_move[1]][best_move[2]])

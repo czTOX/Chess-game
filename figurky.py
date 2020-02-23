@@ -1,6 +1,10 @@
 import pygame
-import funkce as fce
 from variables import *
+import funkce as fce
+
+
+souradnice_b = []
+souradnice_c = []
 
 
 # Třídy
@@ -25,9 +29,10 @@ class Figurka:
 
 
 class Kral(Figurka):
-    def __init__(self, jecerna, x, y, pole, hodnota):
+    def __init__(self, jecerna, x, y, pole):
         super().__init__(jecerna, x, y)
         if jecerna:
+            global souradnice_c
             souradnice_c = [self.x, self.y]
             self.this = pygame.image.load("obrazky/black_king.png")
             self.hodnotapozice = [
@@ -41,6 +46,7 @@ class Kral(Figurka):
                 [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
             ]
         else:
+            global souradnice_b
             souradnice_b = [self.x, self.y]
             self.this = pygame.image.load("obrazky/white_king.png")
             self.hodnotapozice = [
@@ -114,10 +120,6 @@ class Kral(Figurka):
                 if pole[sug[i][0]][sug[i][1]] != '':
                     pole[sug[i][0]][sug[i][1]].jecerna = not pole[sug[i][0]][sug[i][1]].jecerna
         pole[self.x][self.y] = self
-        if self.jecerna:
-            souradnice_c = [self.x, self.y]
-        else:
-            souradnice_b = [self.x, self.y]
         return sug
 
     def kam2(self, pole):
@@ -175,8 +177,10 @@ class Kral(Figurka):
             pole[self.x][self.y] = self
 
         if self.jecerna:
+            global souradnice_c
             souradnice_c = [self.x, self.y]
         else:
+            global souradnice_b
             souradnice_b = [self.x, self.y]
 
     def move2(self, pole, where):
@@ -185,8 +189,10 @@ class Kral(Figurka):
         self.y = where[1]
         pole[self.x][self.y] = self
         if self.jecerna:
+            global souradnice_c
             souradnice_c = [self.x, self.y]
         else:
+            global souradnice_b
             souradnice_b = [self.x, self.y]
 
 
