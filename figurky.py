@@ -585,7 +585,7 @@ class Pesak(Figurka):
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
                     blackFigs.remove(self)
-                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0)
+                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0, False)
                     blackFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
                     blackFigs.remove(self)
@@ -606,7 +606,7 @@ class Pesak(Figurka):
                 ktera = fce.vyber()
                 if ktera == 'Kralovna':
                     whiteFigs.remove(self)
-                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0)
+                    pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0, False)
                     whiteFigs.append(pole[self.x][self.y])
                 elif ktera == 'Strelec':
                     whiteFigs.remove(self)

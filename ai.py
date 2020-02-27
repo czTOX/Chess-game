@@ -57,7 +57,7 @@ fce.vykresli_pole(window, pole)
 
 image_user = pygame.image.load("obrazky/user.png")
 image_ai = pygame.image.load("obrazky/ai.png")
-window.blit(image_user, [1225, 75])
+window.blit(image_ai, [1225, 75])
 window.blit(image_user, [1225, 625])
 pygame.display.update()
 

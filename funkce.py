@@ -223,9 +223,9 @@ def minimax(pole, hloubka, ismax, alfa, beta):
         if a == 0:
             return ohodnoceni(pole)
         elif a == 1:
-            return math.inf
+            return 9999
         elif a == -1:
-            return -math.inf
+            return -9999
         elif a == 2:
             return 50
         elif a == -2:
