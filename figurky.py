@@ -197,7 +197,7 @@ class Kral(Figurka):
 
 
 class Kralovna(Figurka):
-    def __init__(self, jecerna, x, y, pole, hodnota):
+    def __init__(self, jecerna, x, y, pole, hodnota, je_vygenerovana):
         super().__init__(jecerna, x, y)
         if jecerna:
             self.this = pygame.image.load("obrazky/black_queen.png")
@@ -205,6 +205,7 @@ class Kralovna(Figurka):
             self.this = pygame.image.load("obrazky/white_queen.png")
         pole[self.x][self.y] = self
         self.hodnota = 90
+        self.je_vygenerovana = je_vygenerovana
         self.hodnotapozice = [
             [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
             [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
@@ -295,6 +296,29 @@ class Kralovna(Figurka):
                 break
             y -= 1
         return sug
+
+    def move(self, pole, where):
+        # Klasická dáma (originál)
+        if not self.je_vygenerovana:
+            pole[self.x][self.y] = ''
+            self.x = where[0]
+            self.y = where[1]
+            pole[self.x][self.y] = self
+        # Je vygenerová z pěšce
+        else:
+            self.je_vygenerovana = True
+            pole[self.x][self.y] = ''
+            self.x = where[0]
+            self.y = where[1]
+            if self.jecerna:
+                blackFigs.remove(self)
+                pole[self.x][self.y] = Pesak(self.jecerna, self.x, self.y, pole, 0)
+                blackFigs.append(pole[self.x][self.y])
+            else:
+                whiteFigs.remove(self)
+                pole[self.x][self.y] = Pesak(self.jecerna, self.x, self.y, pole, 0)
+                whiteFigs.append(pole[self.x][self.y])
+            pole[self.x][self.y] = self
 
 
 class Strelec(Figurka):
@@ -604,3 +628,18 @@ class Pesak(Figurka):
         self.x = where[0]
         self.y = where[1]
         pole[self.x][self.y] = self
+
+    def move3(self, pole, where):
+        pole[self.x][self.y] = ''
+        self.x = where[0]
+        self.y = where[1]
+        if self.jecerna and self.y == 7:
+            blackFigs.remove(self)
+            pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0, True)
+            blackFigs.append(pole[self.x][self.y])
+        elif not self.jecerna and self.y == 0:
+            whiteFigs.remove(self)
+            pole[self.x][self.y] = Kralovna(self.jecerna, self.x, self.y, pole, 0, True)
+            whiteFigs.append(pole[self.x][self.y])
+        else:
+            pole[self.x][self.y] = self

@@ -138,7 +138,7 @@ def je_mat(pole, souradnice, friendly_figs, enemy_figs):
         # Může se král movnou někam, kde by šach neměl
         if not pole[souradnice[0]][souradnice[1]].kam(pole):
             # Může šach nějaká figurka zablokovat nebo vyhodit figurku, která mu dává šach
-            if block(pole, souradnice, friendly_figs, enemy_figs):
+            if not block(pole, souradnice, friendly_figs, enemy_figs):
                 return True
     return False
 
@@ -220,14 +220,15 @@ def minimax(pole, hloubka, ismax, alfa, beta):
     # Báze
     if hloubka == 1 or (stav(pole) != 0):
         a = stav(pole)
-        # TODO i dont fucking know how this works so I am so fucking stupid, change later
         if a == 0:
             return ohodnoceni(pole)
         elif a == 1:
             return math.inf
         elif a == -1:
             return -math.inf
-        else:
+        elif a == 2:
+            return 50
+        elif a == -2:
             return -50
 
     # else:
@@ -237,13 +238,29 @@ def minimax(pole, hloubka, ismax, alfa, beta):
             item = move[0]
             backup_coords = [item.x, item.y]
             recover_fig = pole[move[1]][move[2]]
-            if type(item) == figurky.Pesak or type(item) == figurky.Kral:
+            if recover_fig != '':
+                if recover_fig.jecerna:
+                    blackFigs.remove(recover_fig)
+                else:
+                    whiteFigs.remove(recover_fig)
+            if type(item) == figurky.Kral:
                 item.move2(pole, [move[1], move[2]])
+            elif type(item) == figurky.Pesak:
+                item.move3(pole, [move[1], move[2]])
             else:
                 item.move(pole, [move[1], move[2]])
             pomocna = minimax(pole, hloubka - 1, False, alfa, beta)
-            item.move(pole, backup_coords)
+            # item.move(pole, backup_coords)
+            if type(item) == figurky.Kral:
+                item.move2(pole, backup_coords)
+            else:
+                item.move(pole, backup_coords)
             pole[move[1]][move[2]] = recover_fig
+            if recover_fig != '':
+                if recover_fig.jecerna:
+                    blackFigs.append(recover_fig)
+                else:
+                    whiteFigs.append(recover_fig)
             hodnota = max(hodnota, pomocna)
             alfa = max(alfa, pomocna)
             if beta <= alfa:
@@ -256,13 +273,29 @@ def minimax(pole, hloubka, ismax, alfa, beta):
             item = move[0]
             backup_coords = [item.x, item.y]
             recover_fig = pole[move[1]][move[2]]
+            if recover_fig != '':
+                if recover_fig.jecerna:
+                    blackFigs.remove(recover_fig)
+                else:
+                    whiteFigs.remove(recover_fig)
             if type(item) == figurky.Pesak or type(item) == figurky.Kral:
                 item.move2(pole, [move[1], move[2]])
+            elif type(item) == figurky.Pesak:
+                item.move3(pole, [move[1], move[2]])
             else:
                 item.move(pole, [move[1], move[2]])
             pomocna = minimax(pole, hloubka - 1, True, alfa, beta)
-            item.move(pole, backup_coords)
+            # item.move(pole, backup_coords)
+            if type(item) == figurky.Kral:
+                item.move2(pole, backup_coords)
+            else:
+                item.move(pole, backup_coords)
             pole[move[1]][move[2]] = recover_fig
+            if recover_fig != '':
+                if recover_fig.jecerna:
+                    blackFigs.append(recover_fig)
+                else:
+                    whiteFigs.append(recover_fig)
             hodnota = min(hodnota, pomocna)
             beta = min(beta, pomocna)
             if beta <= alfa:
@@ -276,19 +309,19 @@ def get_moves(pole, jecerna):
         for fig in x:
             if fig != '':
                 if fig.jecerna == jecerna:
-                    if type(fig) == figurky.Kral:
-                        for place in fig.kam2(pole):
-                            moznosti.append([fig, place[0], place[1]])
-                    else:
-                        for place in fig.kam(pole):
-                            moznosti.append([fig, place[0], place[1]])
+                    # if type(fig) == figurky.Kral:
+                    #     for place in fig.kam2(pole):
+                    #         moznosti.append([fig, place[0], place[1]])
+                    # else:
+                    for place in fig.kam(pole):
+                        moznosti.append([fig, place[0], place[1]])
                 else:
-                    if type(fig) == figurky.Kral:
-                        for place in fig.kam2(pole):
-                            moznosti.append([fig, place[0], place[1]])
-                    else:
-                        for place in fig.kam(pole):
-                            moznosti.append([fig, place[0], place[1]])
+                    # if type(fig) == figurky.Kral:
+                    #     for place in fig.kam2(pole):
+                    #         moznosti.append([fig, place[0], place[1]])
+                    # else:
+                    for place in fig.kam(pole):
+                        moznosti.append([fig, place[0], place[1]])
 
     return moznosti
 
@@ -299,32 +332,30 @@ def ohodnoceni(pole):
         for y in range(8):
             if pole[x][y] is not '':
                 item = pole[x][y]
-                if pole[x][y].jecerna:
+                if item.jecerna:
                     soucet += (item.hodnota + item.hodnotapozice[x][y])
                 else:
-                    soucet += (item.hodnota + item.hodnotapozice[x][y]) * (-1)
+                    soucet += ((item.hodnota * (-1)) + item.hodnotapozice[x][y])
     return soucet
 
 
 def stav(pole):
+    # Pat (bílý)    -2
     # Bilý výhra    -1
     # Černy výhra   1
-    # Pat           2
+    # Pat (černý)   2
     # Nic           0
     if not pole[figurky.souradnice_b[0]][figurky.souradnice_b[1]].kam(pole):
-        if je_v_sachu(pole, figurky.souradnice_b, blackFigs):
-            if block(pole, figurky.souradnice_b, whiteFigs, blackFigs):
+        if not block(pole, figurky.souradnice_b, whiteFigs, blackFigs):
+            if je_v_sachu(pole, figurky.souradnice_b, blackFigs):
                 return 1
-        else:
-            if not block(pole, figurky.souradnice_b, whiteFigs, blackFigs):
-                return 2
-
+            else:
+                return -2
     if not pole[figurky.souradnice_c[0]][figurky.souradnice_c[1]].kam(pole):
-        if je_v_sachu(pole, figurky.souradnice_c, whiteFigs):
-            if block(pole, figurky.souradnice_c, blackFigs, whiteFigs):
+        if not block(pole, figurky.souradnice_c, blackFigs, whiteFigs):
+            if je_v_sachu(pole, figurky.souradnice_c, whiteFigs):
                 return -1
-        else:
-            if not block(pole, figurky.souradnice_c, blackFigs, whiteFigs):
+            else:
                 return 2
 
     return 0

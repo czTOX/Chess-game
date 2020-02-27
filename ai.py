@@ -34,8 +34,8 @@ kral_c = figurky.Kral(True, 4, 0, pole)
 blackFigs.append(kral_c)
 kral_b = figurky.Kral(False, 4, 7, pole)
 whiteFigs.append(kral_b)
-blackFigs.append(figurky.Kralovna(True, 3, 0, pole, -90))
-whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 90))
+blackFigs.append(figurky.Kralovna(True, 3, 0, pole, -90, False))
+whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 90, False))
 blackFigs.append(figurky.Strelec(True, 2, 0, pole, -30)),
 blackFigs.append(figurky.Strelec(True, 5, 0, pole, -30)),
 whiteFigs.append(figurky.Strelec(False, 2, 7, pole, 30)),
@@ -142,13 +142,45 @@ while run:
                 for move in fig.kam(pole):
                     backup_coords = [fig.x, fig.y]
                     recover_fig = pole[move[0]][move[1]]
-                    if type(fig) == figurky.Pesak or type(fig) == figurky.Kral:
+                    if recover_fig != '':
+                        if recover_fig.jecerna:
+                            blackFigs.remove(recover_fig)
+                        else:
+                            whiteFigs.remove(recover_fig)
+                    if type(fig) == figurky.Kral:
                         fig.move2(pole, move)
+                    elif type(fig) == figurky.Pesak:
+                        fig.move3(pole, move)
                     else:
                         fig.move(pole, move)
-                    pomocna = fce.minimax(pole, obtiznost, False, alfa, beta)
-                    fig.move(pole, backup_coords)
+                    if not fce.je_v_sachu(pole, [kral_c.x, kral_c.y], whiteFigs):
+                        pomocna = fce.minimax(pole, obtiznost, False, alfa, beta)
+                    else:
+                        # TODO zde je chyba idk jaká
+                        # TODO pri matu na cerneho spadne a v bestmove není nic
+                        # fig.move(pole, backup_coords)
+                        if type(fig) == figurky.Kral:
+                            fig.move2(pole, backup_coords)
+                        else:
+                            fig.move(pole, backup_coords)
+                        pole[move[0]][move[1]] = recover_fig
+                        if recover_fig != '':
+                            if recover_fig.jecerna:
+                                blackFigs.append(recover_fig)
+                            else:
+                                whiteFigs.append(recover_fig)
+                        continue
+                    # fig.move(pole, backup_coords)
+                    if type(fig) == figurky.Kral:
+                        fig.move2(pole, backup_coords)
+                    else:
+                        fig.move(pole, backup_coords)
                     pole[move[0]][move[1]] = recover_fig
+                    if recover_fig != '':
+                        if recover_fig.jecerna:
+                            blackFigs.append(recover_fig)
+                        else:
+                            whiteFigs.append(recover_fig)
                     if hodnota < pomocna:
                         hodnota = pomocna
                         best_move = [fig, move[0], move[1]]

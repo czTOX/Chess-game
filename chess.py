@@ -32,8 +32,8 @@ kral_c = figurky.Kral(True, 4, 0, pole)
 blackFigs.append(kral_c)
 kral_b = figurky.Kral(False, 4, 7, pole)
 whiteFigs.append(kral_b)
-blackFigs.append(figurky.Kralovna(True, 3, 0, pole, 0))
-whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 0))
+blackFigs.append(figurky.Kralovna(True, 3, 0, pole, 0, False))
+whiteFigs.append(figurky.Kralovna(False, 3, 7, pole, 0, False))
 blackFigs.append(figurky.Strelec(True, 2, 0, pole, 0)),
 blackFigs.append(figurky.Strelec(True, 5, 0, pole, 0)),
 whiteFigs.append(figurky.Strelec(False, 2, 7, pole, 0)),
