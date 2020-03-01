@@ -349,7 +349,7 @@ class Strelec(Figurka):
                 [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
             ]
         pole[self.x][self.y] = self
-        self.hodnota = 30
+        self.hodnota = 40
 
     def kam(self, pole):
         sug = []

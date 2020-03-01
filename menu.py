@@ -1,38 +1,5 @@
 import pygame
-from funkce import name_tab
-
-
-# Třídy
-class button():
-    def __init__(self, clr, x, y, width, height, text=''):
-        self.color = clr
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.text = text
-
-    def draw(self, win, outline=None):
-        # Call this method to draw the button on the screen
-        if outline:
-            pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
-
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
-
-        if self.text != '':
-            font = pygame.font.SysFont('trebuchetms', 20)
-            text = font.render(self.text, 1, (0, 0, 0))
-            win.blit(text, (
-            self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
-
-    def over(self, pos):
-        # pos[0] > self.x and pos[0] < self.x + self.width
-        if self.x < pos[0] < self.x + self.width:
-            # pos[1] > self.y and pos[1] < self.y + self.height
-            if self.y < pos[1] < self.y + self.height:
-                return True
-
-        return False
+import funkce as fce
 
 
 # Funkce
@@ -48,13 +15,13 @@ def vykresli():
 
 
 def single():
-    name_tab(1)
+    fce.name_tab(1)
     import variables
     import ai
 
 
 def multi():
-    name_tab(0)
+    fce.name_tab(0)
     import variables
     import chess
 
@@ -73,10 +40,10 @@ vyska = 560
 color = [30, 144, 255]
 color2 = [10, 124, 255]
 background = pygame.image.load("obrazky/background.jpg")
-game1 = button(color, 125, 150, 150, 50, 'Hra pro 1 hráče')
-game2 = button(color, 125, 250, 150, 50, 'Hra pro 2 hráče')
-scoreboard = button(color, 125, 350, 150, 50, 'Žebříček')
-end = button(color, 125, 450, 150, 50, 'Ukončit hru')
+game1 = fce.Button(color, 125, 150, 150, 50, 'Hra pro 1 hráče')
+game2 = fce.Button(color, 125, 250, 150, 50, 'Hra pro 2 hráče')
+scoreboard = fce.Button(color, 125, 350, 150, 50, 'Žebříček')
+end = fce.Button(color, 125, 450, 150, 50, 'Ukončit hru')
 font = pygame.font.SysFont('trebuchetms', 60)
 title = font.render("Šachy", 1, (0, 0, 0))
 

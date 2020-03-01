@@ -193,7 +193,10 @@ while run:
                 whiteFigs.remove(pole[best_move[1]][best_move[2]])
                 dead.append(pole[best_move[1]][best_move[2]])
                 fce.vypis_mrtvych(window, dead)
-            best_move[0].move(pole, [best_move[1], best_move[2]])
+            if type(best_move[0]) == figurky.Kral:
+                best_move[0].move2(pole, [best_move[1], best_move[2]])
+            else:
+                best_move[0].move(pole, [best_move[1], best_move[2]])
             selected = False
             ktera_tahne = not ktera_tahne
             fce.refresh(window, pole)

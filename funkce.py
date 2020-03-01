@@ -4,7 +4,38 @@ import tkinter as tk
 import figurky
 from variables import *
 import math
-from figurky import souradnice_b, souradnice_c
+
+
+# Třídy
+class Button:
+    def __init__(self, clr, x, y, width, height, text=''):
+        self.color = clr
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self, win, outline=None):
+        # Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
+
+        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
+
+        if self.text != '':
+            font = pygame.font.SysFont('trebuchetms', 20)
+            text = font.render(self.text, 1, (0, 0, 0))
+            win.blit(text, (self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
+
+    def over(self, pos):
+        # pos[0] > self.x and pos[0] < self.x + self.width
+        if self.x < pos[0] < self.x + self.width:
+            # pos[1] > self.y and pos[1] < self.y + self.height
+            if self.y < pos[1] < self.y + self.height:
+                return True
+
+        return False
 
 
 # Funkce
@@ -120,12 +151,18 @@ def block(pole, souradnice, friendly_figs, enemy_figs):
                 friend.move(pole, [place[0], place[1]])
 
             if je_v_sachu(pole, souradnice, enemy_figs):
-                friend.move(pole, backup_coords)
+                if type(friend) == figurky.Kral:
+                    friend.move2(pole, backup_coords)
+                else:
+                    friend.move(pole, backup_coords)
                 pole[place[0]][place[1]] = recover_fig
                 if recover_fig is not '':
                     enemy_figs.append(recover_fig)
             else:
-                friend.move(pole, backup_coords)
+                if type(friend) == figurky.Kral:
+                    friend.move2(pole, backup_coords)
+                else:
+                    friend.move(pole, backup_coords)
                 pole[place[0]][place[1]] = recover_fig
                 if recover_fig is not '':
                     enemy_figs.append(recover_fig)
