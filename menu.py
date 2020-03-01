@@ -1,5 +1,9 @@
 import pygame
 import funkce as fce
+import scoreboard as sb
+import variables as vb
+import ai
+import chess
 
 
 # Funkce
@@ -16,18 +20,18 @@ def vykresli():
 
 def single():
     fce.name_tab(1)
-    import variables
-    import ai
+    vb.cons()
+    ai.main()
 
 
 def multi():
     fce.name_tab(0)
-    import variables
-    import chess
+    vb.cons()
+    chess.main()
 
 
 def score():
-    import scoreboard
+    sb.main()
 
 
 # Inicializace pygame

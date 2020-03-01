@@ -21,53 +21,69 @@ import funkce as fce
 #     ctypes.windll.user32.MessageBoxW(0, 'Zatím není ve výsledcích ani jedna hra :(', 'File is empty', 1)
 
 
-# Funkce
-def vykresli():
+def main():
+    # Funkce
+    def vykresli():
+        win = pygame.display.set_mode((sirka, vyska))
+        pygame.display.set_caption("Žebříček")
+        win.blit(background, [0, 0])
+        win.blit(title, (67, 40))
+        zpet.draw(win, 5)
+
+    # Inicializace pygame
+    pygame.init()
+
+    # Konstanty
+    run = True
+    sirka = 400
+    vyska = 600
+    color = [30, 144, 255]
+    color2 = [10, 124, 255]
+    background = pygame.image.load("obrazky/background.jpg")
+    zpet = fce.Button(color, 125, 450, 150, 50, 'Zpět')
+    font = pygame.font.SysFont('trebuchetms', 35, bold=True)
+    font.set_underline(True)
+    title = font.render("Nejrychlejší hry", 1, (0, 0, 0))
+    font = pygame.font.SysFont('trebuchetms', 20)
+
+    # Základní info pro okno
     win = pygame.display.set_mode((sirka, vyska))
     pygame.display.set_caption("Žebříček")
-    win.blit(background, [0, 0])
-    win.blit(title, (130, 40))
-    zpet.draw(win, 5)
 
+    file = open('zebricek.txt', 'r')
+    if os.stat("zebricek.txt").st_size != 0:
+        vykresli()
+        a = []
+        y = 0
+        for line in file:
+            s = line.split(';')
+            s[2] = s[2].rstrip('\n')
+            a.append(s)
+        a = sorted(a, key=lambda x: x[1])
+        for zapis in a:
+            time = ("%02d:%02d" % (math.floor(float(zapis[1])) / 60, math.floor(float(zapis[1])) % 60))
+            text = zapis[0] + " porazil/a " + zapis[2] + " v čase: " + time
+            label = font.render(text, 1, (0, 0, 0))
+            win.blit(label, [63, 125 + y])
+            y += 25
+            if y >= 250:
+                break
+        pygame.display.update()
+        while run:
+            for event in pygame.event.get():
+                pos = pygame.mouse.get_pos()
 
-# Inicializace pygame
-pygame.init()
+                if event.type == pygame.MOUSEMOTION:
+                    if zpet.over(pos):
+                        zpet.color = color2
+                    else:
+                        zpet.color = color
 
-# Konstanty
-run = True
-sirka = 400
-vyska = 560
-color = [30, 144, 255]
-color2 = [10, 124, 255]
-background = pygame.image.load("obrazky/background.jpg")
-zpet = fce.Button(color, 125, 450, 150, 50, 'Zpět')
-font = pygame.font.SysFont('trebuchetms', 60)
-title = font.render("10 nejrychlejších her", 1, (0, 0, 0))
-
-
-# Základní info pro okno
-win = pygame.display.set_mode((sirka, vyska))
-pygame.display.set_caption("Žebříček")
-
-file = open('zebricek.txt', 'r')
-if os.stat("zebricek.txt").st_size == 0:
-    vykresli()
-    pygame.display.update()
-    while run:
-        for event in pygame.event.get():
-            pos = pygame.mouse.get_pos()
-
-            if event.type == pygame.MOUSEMOTION:
-                if zpet.over(pos):
-                    zpet.color = color2
-                else:
-                    zpet.color = color
-
-            if event.type == pygame.QUIT:
-                run = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if zpet.over(pos):
+                if event.type == pygame.QUIT:
                     run = False
-else:
-    ctypes.windll.user32.MessageBoxW(0, 'Zatím není ve výsledcích ani jedna hra :(', 'File is empty', 1)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if zpet.over(pos):
+                        run = False
+    else:
+        ctypes.windll.user32.MessageBoxW(0, 'Zatím není ve výsledcích ani jedna hra :(', 'File is empty', 1)

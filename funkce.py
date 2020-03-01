@@ -4,6 +4,7 @@ import tkinter as tk
 import figurky
 from variables import *
 import math
+import threading as thrd
 
 
 # Třídy
@@ -38,6 +39,17 @@ class Button:
         return False
 
 
+class Thread(thrd.Thread):
+    def __init__(self, threadid, target, *args):
+        thrd.Thread.__init__(self)
+        self.threadid = threadid
+        self.target = target
+        self._args = args
+
+    def run(self):
+        self.target(*self._args)
+
+
 # Funkce
 def vykresli_sachovnici(window, strana_sachovnice):
     is_black = False
@@ -65,22 +77,30 @@ def vyber():
     vyber_okno = tk.Tk()
     vyber_okno.geometry('300x300')
     vyber_okno.title('Výběr figurky')
+    vyber_okno.attributes("-topmost", True)
+    vyber_okno.configure(bg="light blue")
     neco = tk.StringVar(value='Kralovna')
 
     def zavri():
         vyber_okno.destroy()
 
     nadpis = tk.Label(vyber_okno, text='Vyber figurku, kterou chceš svého pěšce nehradit:')
+    nadpis.configure(bg="light blue")
     nadpis.pack()
-    b_kralovna = tk.Radiobutton(vyber_okno, text='kralovna', variable=neco, value='Kralovna')
+    b_kralovna = tk.Radiobutton(vyber_okno, text='Královna', variable=neco, value='Kralovna')
+    b_kralovna.configure(bg="light blue")
     b_kralovna.pack()
-    b_strelec = tk.Radiobutton(vyber_okno, text='strelec', variable=neco, value='Strelec')
+    b_strelec = tk.Radiobutton(vyber_okno, text='Střelec', variable=neco, value='Strelec')
+    b_strelec.configure(bg="light blue")
     b_strelec.pack()
-    b_kun = tk.Radiobutton(vyber_okno, text='kun', variable=neco, value='Kun')
+    b_kun = tk.Radiobutton(vyber_okno, text='Kůň', variable=neco, value='Kun')
+    b_kun.configure(bg="light blue")
     b_kun.pack()
-    b_vez = tk.Radiobutton(vyber_okno, text='vez', variable=neco, value='Vez')
+    b_vez = tk.Radiobutton(vyber_okno, text='Věž', variable=neco, value='Vez')
+    b_vez.configure(bg="light blue")
     b_vez.pack()
     submit = tk.Button(vyber_okno, text='Submit', command=zavri)
+    submit.configure(bg="light blue")
     submit.pack()
 
     vyber_okno.mainloop()
@@ -116,7 +136,7 @@ def vypis_mrtvych(window, dead):
 
 def zapis_skore(time):
     zebricek = open("zebricek.txt", "a+")
-    zebricek.write(names[0] + ";" + names[1] + ";" + str(time) + "\n")
+    zebricek.write(names[0] + ";" + str(time) + ";" + names[1] + "\n")
     zebricek.close()
 
 
@@ -211,17 +231,21 @@ def name_tab(typ):
         okno.destroy()
 
     okno = tk.Tk()
-    okno.geometry('200x100')
+    okno.attributes("-topmost", True)
+    okno.configure(bg="light blue")
     # Zadání 2 jmen pro multiplayer mód
     if typ == 0:
+        okno.geometry('200x120')
         okno.title('Zadejte jména hráčů')
 
         label1 = tk.Label(okno, text='Bílá:')
+        label1.configure(bg="light blue")
         label1.pack()
         textbox1 = tk.Entry(okno)
         textbox1.focus_set()
         textbox1.pack()
         label2 = tk.Label(okno, text='Černá:')
+        label2.configure(bg="light blue")
         label2.pack()
         textbox2 = tk.Entry(okno)
         textbox2.pack()
@@ -230,23 +254,28 @@ def name_tab(typ):
 
     # Zadání jména pro hru s AI
     elif typ == 1:
-        okno.geometry('200x250')
-        obtiznost = tk.IntVar()
+        okno.geometry('200x220')
+        obtiznost = tk.IntVar(value=1)
         okno.title('Zadej jméno hráče')
 
         label1 = tk.Label(okno, text='Jméno:')
+        label1.configure(bg="light blue")
         label1.pack()
         textbox1 = tk.Entry(okno)
         textbox1.focus_set()
         textbox1.pack()
         lehke = tk.Radiobutton(okno, text='Lehká', variable=obtiznost, value=1)
         lehke.select()
+        lehke.configure(bg="light blue")
         lehke.pack()
         stredni = tk.Radiobutton(okno, text='Střední', variable=obtiznost, value=2)
+        stredni.configure(bg="light blue")
         stredni.pack()
         tezke = tk.Radiobutton(okno, text='Těžká', variable=obtiznost, value=3)
+        tezke.configure(bg="light blue")
         tezke.pack()
         button = tk.Button(okno, text='Hrát!', command=play2)
+        button.configure(bg="light blue")
         button.pack()
 
     okno.mainloop()
